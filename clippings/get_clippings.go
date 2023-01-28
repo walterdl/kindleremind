@@ -12,17 +12,17 @@ func GetClippings() []Clipping {
 	rawClippings := clearEmptyLastClipping(splitClippings(getRawContent()))
 	result := make([]Clipping, len(rawClippings))
 
-	for _, c := range rawClippings {
+	for i, c := range rawClippings {
 		c = trimLeadingLineBreak(c)
 		t, c := abstractTitle(c)
 		m, c := abstractMetadata(c)
 		c = trimEndingLineBreaks(c)
 
-		result = append(result, Clipping{
+		result[i] = Clipping{
 			Title:    t,
 			Metadata: m,
 			Content:  c,
-		})
+		}
 	}
 
 	return result
