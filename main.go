@@ -1,8 +1,8 @@
 package main
 
 import (
-	"kindleremind/clippings"
-	"kindleremind/utils"
+	"github.com/walterdl/kindleremind/clippings"
+	"github.com/walterdl/kindleremind/utils"
 )
 
 func main() {
