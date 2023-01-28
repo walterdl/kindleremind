@@ -2,7 +2,7 @@ package clippings
 
 import "strings"
 
-func splitByMetadata(s string) (string, string) {
+func abstractMetadata(s string) (string, string) {
 	metadata := ""
 
 	for {

@@ -9,19 +9,18 @@ const lineBreak = "\r\n"
 const endOfTitle = "\r\n- "
 
 func GetClippings() []Clipping {
-	raw := getRawContent()
-	rawClippings := clearEmptyLastClipping(splitClippings(raw))
+	rawClippings := clearEmptyLastClipping(splitClippings(getRawContent()))
 	result := make([]Clipping, len(rawClippings))
 
 	for _, c := range rawClippings {
 		c = trimLeadingLineBreak(c)
-		title, c := splitByTitle(c)
-		metadata, c := splitByMetadata(c)
+		t, c := abstractTitle(c)
+		m, c := abstractMetadata(c)
 		c = trimEndingLineBreaks(c)
 
 		result = append(result, Clipping{
-			Title:    title,
-			Metadata: metadata,
+			Title:    t,
+			Metadata: m,
 			Content:  c,
 		})
 	}
@@ -55,7 +54,7 @@ func trimLeadingLineBreak(s string) string {
 	return strings.TrimPrefix(s, lineBreak)
 }
 
-func splitByTitle(s string) (title, rest string) {
+func abstractTitle(s string) (title, rest string) {
 	i := strings.Index(s, endOfTitle)
 
 	if i == -1 {
