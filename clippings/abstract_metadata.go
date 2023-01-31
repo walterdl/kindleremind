@@ -1,40 +1,25 @@
 package clippings
 
-import "strings"
+import (
+	"strings"
+)
 
 func abstractMetadata(s string) (string, string) {
-	metadata := ""
+	if i := indexOfLineBreak(s); i != -1 {
+		metadata := s[:i]
+		content := s[i:]
+		content = trimPrefix(content, lineBreak)
 
-	for {
-		if indexOfLineBreak(s) != -1 {
-			before := s[:indexOfLineBreak(s)]
-
-			if metadata == "" {
-				metadata = before
-				s = deleteLineBreak(s)
-				continue
-			}
-
-			if indexOfLineBreak(s) == 0 {
-				s = deleteLineBreak(s)
-			} else {
-				break
-			}
-		} else {
-			break
+		if content == "" {
+			content = metadata
 		}
+
+		return metadata, content
 	}
 
-	return metadata, s
+	return "", s
 }
 
 func indexOfLineBreak(s string) int {
 	return strings.Index(s, lineBreak)
-}
-
-func deleteLineBreak(s string) string {
-	s = s[indexOfLineBreak(s):]
-	s = s[len(lineBreak):]
-
-	return s
 }
