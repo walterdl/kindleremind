@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	"github.com/walterdl/kindleremind/clippings"
+	"github.com/walterdl/kindleremind/utils"
 )
 
 var (
@@ -31,7 +31,11 @@ func Execute() error {
 }
 
 func runCommand(cmd *cobra.Command, args []string) error {
-	fmt.Println("Running command", file)
+	clippings, err := clippings.GetClippings(file)
+	if err != nil {
+		return err
+	}
 
+	utils.JsonPrint(clippings)
 	return nil
 }

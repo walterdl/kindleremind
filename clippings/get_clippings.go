@@ -7,14 +7,16 @@ import (
 const lineBreak = "\r\n"
 const endOfTitle = "\r\n- "
 
-func GetClippings() []Clipping {
+func GetClippings(file string) ([]Clipping, error) {
 	result := make([]Clipping, 0)
 
-	for _, c := range rawClippings() {
-		// Trims BOM character
-		c = trimPrefix(c, string(rune('\uFEFF')))
-		c = trimPrefix(c, lineBreak)
-		c = trimSuffix(c, lineBreak)
+	clippings, err := getRawClippings(file)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, c := range clippings {
+		c = clearClipping(c)
 		t, c := abstractTitle(c)
 		m, c := abstractMetadata(c)
 
@@ -29,7 +31,16 @@ func GetClippings() []Clipping {
 		})
 	}
 
-	return result
+	return result, nil
+}
+
+func clearClipping(c string) string {
+	// Trims BOM character
+	c = trimPrefix(c, string(rune('\uFEFF')))
+	c = trimPrefix(c, lineBreak)
+	c = trimSuffix(c, lineBreak)
+
+	return c
 }
 
 func isMarker(metadata string) bool {

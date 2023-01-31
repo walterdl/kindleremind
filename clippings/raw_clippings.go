@@ -5,22 +5,26 @@ import (
 	"strings"
 )
 
-func rawClippings() []string {
-	f := readFile()
+func getRawClippings(file string) ([]string, error) {
+	f, err := readFile(file)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return clearEmptyLastClipping(
 		splitClippings(f),
-	)
+	), nil
 }
 
-func readFile() string {
-	content, err := os.ReadFile("My Clippings.txt")
+func readFile(file string) (string, error) {
+	content, err := os.ReadFile(file)
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
-	return string(content)
+	return string(content), nil
 }
 
 func splitClippings(s string) []string {
