@@ -1,11 +1,9 @@
 package main
 
 import (
-	"github.com/walterdl/kindleremind/clippings"
-	"github.com/walterdl/kindleremind/utils"
+	"github.com/walterdl/kindleremind/cmd"
 )
 
 func main() {
-	clippings := clippings.GetClippings()
-	utils.JsonPrint(clippings)
+	cmd.Execute()
 }
