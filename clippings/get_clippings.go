@@ -13,10 +13,12 @@ func GetClippings() []Clipping {
 	result := make([]Clipping, len(rawClippings))
 
 	for i, c := range rawClippings {
-		c = trimLeadingLineBreak(c)
+		// Trims BOM character
+		c = trimPrefix(c, string(rune('\uFEFF')))
+		c = trimPrefix(c, lineBreak)
+		c = trimSuffix(c, lineBreak)
 		t, c := abstractTitle(c)
 		m, c := abstractMetadata(c)
-		c = trimEndingLineBreaks(c)
 
 		result[i] = Clipping{
 			Title:    t,
@@ -50,8 +52,20 @@ func clearEmptyLastClipping(s []string) []string {
 	return s
 }
 
-func trimLeadingLineBreak(s string) string {
-	return strings.TrimPrefix(s, lineBreak)
+func trimPrefix(s string, prefix string) string {
+	for strings.HasPrefix(s, prefix) {
+		s = strings.TrimPrefix(s, prefix)
+	}
+
+	return s
+}
+
+func trimSuffix(s string, suffix string) string {
+	for strings.HasSuffix(s, suffix) {
+		s = strings.TrimSuffix(s, suffix)
+	}
+
+	return s
 }
 
 func abstractTitle(s string) (title, rest string) {
@@ -68,16 +82,4 @@ func abstractTitle(s string) (title, rest string) {
 	}
 
 	return
-}
-
-func trimEndingLineBreaks(s string) string {
-	for {
-		i := strings.LastIndex(s, lineBreak)
-
-		if i == -1 {
-			return s
-		}
-
-		s = s[:i]
-	}
 }
