@@ -22,8 +22,7 @@ the clippings you have read via email.`,
 )
 
 func init() {
-	rootCmd.Flags().StringVarP(&file, "file", "f", "", "File path to your clippings file")
-	rootCmd.MarkFlagRequired("file")
+	rootCmd.Flags().StringVarP(&file, "file", "f", "./My Clippings.txt", "File path to your clippings file")
 }
 
 func Execute() error {
