@@ -6,6 +6,6 @@ require (
 
 replace gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 
-module hello-world
+module github.com/walterdl/kindleremind/services/dispatcher
 
 go 1.20
