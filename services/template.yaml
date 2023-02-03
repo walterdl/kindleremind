@@ -6,21 +6,53 @@ Globals:
   Function:
     Timeout: 5
 
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+    Description: The environment name. Used to distinguish resources in multiple environments.
+
 Resources:
+  ClippingsAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ClippingsAPI
+      EndpointConfiguration:
+        Type: REGIONAL
+      StageName: dev
   ClippingsDispatcher:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: clippings-dispatcher/
-      Handler: clippings-dispatcher
+      CodeUri: dispatcher/
+      Handler: dispatcher
       Runtime: go1.x
+      Environment:
+        Variables:
+          ClippingsTableName:
       Architectures:
         - x86_64
       Events:
         CatchAll:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
           Properties:
-            Path: /hello
-            Method: GET
+            Path: /clippings
+            Method: POST
+            RestApiId: !Ref ClippingsAPI
+  ClippingsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: id
+        Type: String
+      # ProvisionedThroughput: Not specified, then on-demand mode.
+      TableName:
+        !Join
+          - '-'
+          - - !Ref Environment
+            - Clippings
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -28,6 +60,3 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   ClippingsDispatcherFunction:
     Value: !GetAtt ClippingsDispatcher.Arn
-  ClippingsDispatcherFunctionIamRole:
-    Description: "Implicit IAM Role created for ClippingsDispatcher function"
-    Value: !GetAtt ClippingsDispatcherFunctionRole.Arn
