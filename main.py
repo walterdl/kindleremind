@@ -1,5 +1,6 @@
 import argparse
 
+import base_handler
 import sync_handler
 
 parser = argparse.ArgumentParser(
@@ -17,7 +18,7 @@ syncCommand = subparser.add_parser(
 syncCommand.add_argument(
     '-f', '--file',
     help='Absolute or relative path from where the program is run to the file containing the highlights. (default: %(default)s)',
-    default="./My Highlights.txt",
+    default=['./My Clippings.txt'],
     required=False,
     nargs=1,
     type=str
@@ -25,4 +26,4 @@ syncCommand.add_argument(
 syncCommand.set_defaults(handler=sync_handler.handler)
 
 args = parser.parse_args()
-args.handler(args)
+base_handler.handleCommand(args)
