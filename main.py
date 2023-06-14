@@ -23,6 +23,12 @@ syncCommand.add_argument(
     nargs=1,
     type=str
 )
+syncCommand.add_argument(
+    '-d', '--debug',
+    help='Whether or not print error details. (default: %(default)s)',
+    action='store_true',
+    required=False,
+)
 syncCommand.set_defaults(handler=sync_handler.handler)
 
 args = parser.parse_args()

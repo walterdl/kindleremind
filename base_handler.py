@@ -5,12 +5,12 @@ def handleCommand(args):
     try:
         args.handler(args)
     except Exception as e:
-        printAndExit(e)
+        printAndExit(e, args.debug)
 
 
-def printAndExit(error):
+def printAndExit(error, debug=False):
     if isinstance(error, AppException):
-        print(error.message)
+        print(error if debug else error.message)
     else:
-        print('Terminating program due to error.')
+        print(error if debug else 'Terminating program due to error.')
     exit(1)
