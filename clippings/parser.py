@@ -1,17 +1,25 @@
 import clippings.raw_abstractor as raw_abstractor
 import clippings.header as header
+import clippings.metadata as metadata
+import json_printer
 
 
 def parse(file_path):
     skipped = 0
     raw_clippings = raw_abstractor.abstract_raw_clippings(file_path)
+    clippings = []
+
     for raw_clipping in raw_clippings:
-        header = get_header(raw_clipping, skipped)
-        print(header)
+        try:
+            clippings.append(_parse_raw_clipping(raw_clipping))
+        except Exception:
+            skipped += 1
+
+    json_printer.print(clippings)
 
 
-def get_header(raw_clipping, skipped):
-    try:
-        return header.get_header(raw_clipping[0])
-    except (ValueError, IndexError):
-        skipped += 1
+def _parse_raw_clipping(raw_clipping):
+    return {
+        "header": header.get_header(raw_clipping[0]),
+        "metadata": metadata.get_metadata(raw_clipping[1]),
+    }
