@@ -15,7 +15,10 @@ def parse(file_path):
         except Exception:
             skipped += 1
 
-    json_printer.print(clippings)
+    json_printer.print({
+        "clippings": clippings,
+        "skipped": skipped,
+    })
 
 
 def _parse_raw_clipping(raw_clipping):
