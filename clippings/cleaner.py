@@ -3,6 +3,7 @@ _empty_chars = ('\n', '\r', chr(65279), ' ')
 
 
 def clear_line(line):
+    """Recursively remove empty characters (including BOM characters) from the start and end of a line."""
     return _clear_end(_clear_start(line))
 
 

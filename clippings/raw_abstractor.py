@@ -2,6 +2,16 @@ import clippings.cleaner as cleaner
 
 
 def abstract_raw_clippings(file_path):
+    """Return a list of clippings from the given file path.
+
+    Returns:
+        list: A list of clippings. Each clipping is a list of lines.
+        Example:
+        [
+            ['Header line', 'Metadata line', 'Content line'],
+            ...
+        ]
+    """
     result = []
     with open(file_path, mode='r', encoding='utf-8') as file:
         _process_clippings(file, result)
@@ -11,7 +21,7 @@ def abstract_raw_clippings(file_path):
 def _process_clippings(file, result):
     clipping = []
     for line in file:
-        if is_separator(line):
+        if _is_separator(line):
             _add_clipping_if_nonempty(clipping, result)
             # Resets the raw clipping accumulator to start a new one.
             clipping = []
@@ -26,7 +36,7 @@ def _process_clippings(file, result):
 _CLIPPING_SEPARATOR = '=========='
 
 
-def is_separator(line):
+def _is_separator(line):
     return cleaner.clear_line(line) == _CLIPPING_SEPARATOR
 
 

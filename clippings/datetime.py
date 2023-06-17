@@ -5,12 +5,15 @@ from clippings.months import SPANISH_MONTHS
 
 
 def get_datetime(text):
-    """
-    Example:
-        - Input: "- Your Highlight on page 92 | [location 1406-1407 |] Added on Saturday, 26 March 2016 14:59:39"
-        - Output: datetime object with local timezone.
-    """
+    """Abstract the datetime from the metadata of a clipping.
 
+    Args:
+        text (str): The metadata of a clipping.
+        Example: "- Your Highlight on page 92 | [location 1406-1407 |] Added on Saturday, 26 March 2016 14:59:39"
+
+    Returns:
+        datetime: The datetime of the clipping as a datetime object with local timezone.
+    """
     return _build_datetime(**_datetime_parts(text))
 
 

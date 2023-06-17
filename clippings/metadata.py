@@ -3,7 +3,8 @@ from clippings.datetime import get_datetime
 from clippings.position import get_position
 
 
-def get_metadata(text):
+def parse_metadata(text):
+    """Parse the metadata of a clipping to get the clipping's type, position, and timestamp."""
     try:
         # Removes initial dash and space
         text = text[2:]
@@ -21,6 +22,8 @@ _HIGHLIGHT_TEXT = ("Your Highlight", "La subrayado")
 
 
 class CLIPPING_TYPE(Enum):
+    """Represents the type of a clipping."""
+
     BOOKMARK = 1
     HIGHLIGHT = 2
 
