@@ -1,6 +1,6 @@
 import clippings.raw_abstractor as raw_abstractor
-import clippings.header as header
-import clippings.metadata as metadata
+from clippings.header import get_header
+from clippings.metadata import get_metadata
 import json_printer
 
 
@@ -23,6 +23,7 @@ def parse(file_path):
 
 def _parse_raw_clipping(raw_clipping):
     return {
-        "header": header.get_header(raw_clipping[0]),
-        "metadata": metadata.get_metadata(raw_clipping[1]),
+        **get_header(raw_clipping[0]),
+        **get_metadata(raw_clipping[1]),
+        "content": raw_clipping[2] if len(raw_clipping) > 2 else None,
     }
