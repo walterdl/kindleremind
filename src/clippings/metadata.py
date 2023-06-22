@@ -1,6 +1,9 @@
 from enum import Enum
 from clippings.datetime import get_datetime
 from clippings.position import get_position
+import os
+
+print('The current working directory is', os.getcwd())
 
 
 def parse_metadata(text):

@@ -1,7 +1,7 @@
 import argparse
 
 import base_handler
-import sync_handler
+import sync_handler as sync_handler
 
 parser = argparse.ArgumentParser(
     description="kindleremind CLI client allows management of highlights captured on kindle devices."
