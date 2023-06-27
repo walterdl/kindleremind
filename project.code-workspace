@@ -1,0 +1,11 @@
+// CLI and server folders:
+{
+  "folders": [
+    {
+      "path": "server"
+    },
+    {
+      "path": "cli"
+    }
+  ]
+}
