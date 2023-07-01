@@ -1,62 +1,48 @@
-
 import pytest
+from unittest.mock import Mock
+from api.post_clippings.service import WriteClippingsService
 
 
-_valid_inputs = (
-    {
-        "author": "Martin Fowler",
-        "content": "Brevity is the soul of wit,",
-        "position": {
-            "location": "1181-1181"
-        },
-        "timestamp": "2022-12-17T14:30:30-05:00",
-        "title": "Refactoring: Improving the Design of Existing Code, Second Edition (Garner McCloud's Library)",
-        "type": "HIGHLIGHT"
+_base_clipping = {
+    "author": "Martin Fowler",
+    "content": "Brevity is the soul of wit,",
+    "position": {
+        "location": "1181-1181"
     },
-    {
-        "author": "Pigliucci, Massimo",
-        "content": "Para un estoico, en última instancia no importa si creemos que el Logos es Dios o la naturaleza, siempre que reconozcamos que una vida humana digna se tiene que centrar en el cultivo del car\u00e1cter personal y en la preocupaci\u00f3n por las dem\u00e1s personas (e incluso por la propia naturaleza), y que se disfruta m\u00e1s si se adopta un camino adecuado \u2014pero no fan\u00e1tico\u2014 para distanciarse de los bienes puramente mundanos.",
+    "timestamp": "2022-12-17T14:30:30-05:00",
+    "title": "Refactoring: Improving the Design of Existing Code, Second Edition (Garner McCloud's Library)",
+    "type": "HIGHLIGHT"
+}
+_valid_clippings = {
+    "with_location": _base_clipping.copy(),
+    "with_page": {
+        **_base_clipping,
         "position": {
             "location": "204-207",
             "page": "17"
         },
-        "timestamp": "2023-01-01T22:29:48-05:00",
-        "title": "Cómo ser un estoico (Ariel) (Spanish Edition)",
-        "type": "HIGHLIGHT"
+    },
+    # Convenience duplication for semantic clarity.
+    "with_content": _base_clipping.copy(),
+    "without_content": {
+        **_base_clipping,
+        "content": None
     }
-)
-_invalid_positions = (
-    {
-        **_valid_inputs[0],
-        "position": None
-    },
-    {
-        **_valid_inputs[0],
-        "position": {}
-    },
-    {
-        **_valid_inputs[0],
-        "position": {}
-    },
-    {
-        **_valid_inputs[0],
-        "position": {
-            "location": None
-        }
-    },
-    {
-        **_valid_inputs[0],
-        "position": {
-            "location": "xyz",
-            "page": None
-        }
-    }
-)
+}
 
 
 @pytest.fixture()
-def valid_inputs():
-    return _valid_inputs
+def valid_clippings():
+    return _valid_clippings
+
+
+_invalid_positions_values = [True, (), [], 123]
+_invalid_positions = [[{**_base_clipping, "position": x}]
+                      for x in _invalid_positions_values]
+
+_invalid_content_values = [True, (), [], 123]
+_invalid_contents = [[{**_base_clipping, "content": x}]
+                     for x in _invalid_content_values]
 
 
 @pytest.fixture()
@@ -70,18 +56,20 @@ def invalid_inputs():
         'type',
     )
     # Pre-populate with invalid clippings.
+    result = []
     result = [None, 123, True, ""]
 
-    for invalid_value in invalid_values:
+    for val in invalid_values:
         for field in fields:
             result.append([
                 {
                     # Just grab the first valid input.
-                    **_valid_inputs[0],
-                    field: invalid_value
+                    **_base_clipping,
+                    field: val
                 }
             ])
     result.extend(_invalid_positions)
+    result.extend(_invalid_contents)
 
     return result
 
@@ -95,3 +83,9 @@ def invalid_collections():
         True,
         ""
     )
+
+
+def get_write_clippings_service():
+    key_generator = Mock(return_value="A dummy key")
+
+    return WriteClippingsService(key_generator=key_generator)

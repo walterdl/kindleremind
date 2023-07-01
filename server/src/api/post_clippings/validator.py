@@ -51,7 +51,7 @@ def _check_content(clipping):
     if 'content' not in clipping:
         raise ValueError('Missing required field: content')
 
-    if not isinstance(clipping['content'], str) and clipping['content'] == None:
+    if not isinstance(clipping['content'], str) and clipping['content'] != None:
         raise ValueError('Invalid content field')
 
 
