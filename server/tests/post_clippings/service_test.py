@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock
 from api.post_clippings.service import WriteClippingsService
-from .service_data import get_write_clippings_service, valid_clippings, invalid_inputs, invalid_collections
+from .service_data import get_write_clippings_service, valid_clipping, invalid_inputs, invalid_collections
 
 
 def test_throw_validation_exception_for_invalid_collections(invalid_collections):
@@ -21,3 +21,46 @@ def test_throw_validation_exception_for_invalid_clippings(invalid_inputs):
             raise AssertionError(f'Expected a ValueError for: {input}')
         except ValueError:
             pass
+
+
+def test_key_for_clipping_with_content(valid_clipping):
+    service = get_write_clippings_service()
+    service.write([valid_clipping])
+    service.key_generator.assert_called_with(
+        valid_clipping['content'] + valid_clipping['title'])
+
+
+def test_key_for_clipping_without_content_but_with_location(valid_clipping):
+    without_content = [
+        {
+            **valid_clipping,
+            'content': None,
+            'position': {'location': '123'}
+        },
+        {
+            **valid_clipping,
+            'content': '',
+            'position': {'location': '123'}
+        },
+    ]
+
+    for clipping in without_content:
+        service = get_write_clippings_service()
+        service.write([clipping])
+        service.key_generator.assert_called_once_with(
+            clipping['title'] + clipping['position']['location']
+        )
+
+
+def test_key_for_clipping_without_content_but_with_location_and_page(valid_clipping):
+    clipping = {
+        **valid_clipping,
+        'content': None,
+        'position': {'location': '123', 'page': '456'}
+    }
+    service = get_write_clippings_service()
+    service.write([clipping])
+    position = clipping['position']['location'] + clipping['position']['page']
+    service.key_generator.assert_called_once_with(
+        clipping['title'] + position
+    )

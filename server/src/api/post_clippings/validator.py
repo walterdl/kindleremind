@@ -35,11 +35,11 @@ def _check_fields(clipping):
 def _check_required_str_fields(clipping):
     required_str_fields = ('author', 'timestamp', 'title', 'type')
     for field in required_str_fields:
-        if _empty_str(field, clipping):
+        if is_empty_str(field, clipping):
             raise ValueError(f"Missing required field: {field}")
 
 
-def _empty_str(field, clipping):
+def is_empty_str(field, clipping):
     return (
         field not in clipping or
         not isinstance(clipping[field], str) or
@@ -65,8 +65,8 @@ def _check_position(clipping):
     if 'location' not in clipping['position']:
         raise ValueError("Missing required field: position.location")
 
-    if _empty_str('location', clipping['position']):
+    if is_empty_str('location', clipping['position']):
         raise ValueError("Invalid position.location field")
 
-    if "page" in clipping['position'] and _empty_str('page', clipping['position']):
+    if "page" in clipping['position'] and is_empty_str('page', clipping['position']):
         raise ValueError("Invalid position.page field")

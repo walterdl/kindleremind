@@ -7,33 +7,18 @@ _base_clipping = {
     "author": "Martin Fowler",
     "content": "Brevity is the soul of wit,",
     "position": {
-        "location": "1181-1181"
+        "location": "1181-1181",
+        "page": "83"
     },
     "timestamp": "2022-12-17T14:30:30-05:00",
     "title": "Refactoring: Improving the Design of Existing Code, Second Edition (Garner McCloud's Library)",
     "type": "HIGHLIGHT"
 }
-_valid_clippings = {
-    "with_location": _base_clipping.copy(),
-    "with_page": {
-        **_base_clipping,
-        "position": {
-            "location": "204-207",
-            "page": "17"
-        },
-    },
-    # Convenience duplication for semantic clarity.
-    "with_content": _base_clipping.copy(),
-    "without_content": {
-        **_base_clipping,
-        "content": None
-    }
-}
 
 
 @pytest.fixture()
-def valid_clippings():
-    return _valid_clippings
+def valid_clipping():
+    return _base_clipping.copy()
 
 
 _invalid_positions_values = [True, (), [], 123]
