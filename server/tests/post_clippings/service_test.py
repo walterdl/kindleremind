@@ -64,3 +64,13 @@ def test_key_for_clipping_without_content_but_with_location_and_page(valid_clipp
     service.key_generator.assert_called_once_with(
         clipping['title'] + position
     )
+
+
+def test_save_clippings_using_storage(valid_clipping):
+    service = get_write_clippings_service()
+    service.write([valid_clipping])
+    saved_clippings = service.storage.save.call_args[0][0]
+
+    for key in valid_clipping:
+        assert valid_clipping[key] == saved_clippings[0][key]
+    assert 'key' in saved_clippings[0]

@@ -72,5 +72,6 @@ def invalid_collections():
 
 def get_write_clippings_service():
     key_generator = Mock(return_value="A dummy key")
+    storage = Mock()
 
-    return WriteClippingsService(key_generator=key_generator)
+    return WriteClippingsService(key_generator, storage)

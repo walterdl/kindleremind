@@ -3,13 +3,15 @@ from .validator import validate_clippings, is_empty_str
 
 
 class WriteClippingsService:
-    def __init__(self, *, key_generator):
+    def __init__(self, key_generator, storage):
         self.key_generator = key_generator
+        self.storage = storage
 
     def write(self, clippings):
         validate_clippings(clippings)
         clippings = copy.deepcopy(clippings)
         self._add_keys(clippings)
+        self.storage.save(clippings)
 
     def _add_keys(self, clippings):
         for clipping in clippings:
