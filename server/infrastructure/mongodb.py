@@ -1,14 +1,10 @@
 import pymongo
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from dotenv import load_dotenv
-import os
-
-print('Loading env vars')
-load_dotenv(override=True)
+from api.lib.config import config
 
 print('Connecting to mongodb')
-client = MongoClient(os.environ.get('MONGODB_URI'), server_api=ServerApi('1'))
+client = MongoClient(config.mongodb_uri, server_api=ServerApi('1'))
 clippings = client.kindleremind.clippings
 
 print('Creating clipping indexes')
