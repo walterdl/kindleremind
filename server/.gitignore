@@ -1,1 +1,2 @@
 .env
+infrastructure/playground*.mongodb.js
