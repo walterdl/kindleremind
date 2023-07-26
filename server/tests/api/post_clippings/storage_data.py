@@ -7,8 +7,8 @@ from tests.api.common_fixtures import clippings
 class DummyReplaceOne():
     base = ReplaceOne
 
-    def __init__(self, document=None, replacement=None, upsert=None):
-        self.document = document
+    def __init__(self, filter=None, replacement=None, upsert=None):
+        self.filter = filter
         self.replacement = replacement
         self.upsert = upsert
 

@@ -26,9 +26,14 @@ def test_saves_clippings_in_replace_operation(clippings_collections, clippings):
         assert isinstance(operation, DummyReplaceOne)
 
 
-@pytest.mark.skip(reason='TODO')
-def test_filters_clippings_by_key():
-    pass
+@mock_replace_one
+def test_replaces_clippings_by_key(clippings_collections, clippings):
+    storage = Storage(clippings_collections)
+
+    storage.save(clippings['formatted'])
+
+    for i, operation in enumerate(clippings_collections.executed_operations()):
+        assert operation.filter == {'key': clippings['formatted'][i]['key']}
 
 
 @pytest.mark.skip(reason='TODO')
