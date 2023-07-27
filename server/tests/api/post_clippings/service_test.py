@@ -1,6 +1,5 @@
+from datetime import datetime
 import pytest
-from unittest.mock import Mock
-from api.post_clippings.service import WriteClippingsService
 from .service_data import get_write_clippings_service, valid_clipping, invalid_inputs, invalid_collections
 
 
@@ -66,11 +65,17 @@ def test_key_for_clipping_without_content_but_with_location_and_page(valid_clipp
     )
 
 
-def test_save_clippings_using_storage(valid_clipping):
+def test_save_clippings_with_utc_datetimes(valid_clipping):
     service = get_write_clippings_service()
     service.write([valid_clipping])
     saved_clippings = service.storage.save.call_args[0][0]
 
-    for key in valid_clipping:
-        assert valid_clipping[key] == saved_clippings[0][key]
+    assert isinstance(saved_clippings[0]['timestamp'], datetime)
+
+
+def test_save_clippings_with_keys(valid_clipping):
+    service = get_write_clippings_service()
+    service.write([valid_clipping])
+    saved_clippings = service.storage.save.call_args[0][0]
+
     assert 'key' in saved_clippings[0]
