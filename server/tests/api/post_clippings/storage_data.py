@@ -1,4 +1,5 @@
 from pymongo import ReplaceOne
+from pymongo.results import BulkWriteResult
 from pytest import fixture
 from unittest.mock import Mock, patch
 from tests.api.common_fixtures import clippings
@@ -27,6 +28,11 @@ class DummyClippingsCollection():
     def bulk_write(self, operations, ordered=None):
         self.operations = operations
         self.ordered = ordered
+
+        return BulkWriteResult({
+            'nModified': 14,
+            'nUpserted': 7,
+        }, acknowledged=True)
 
     def executed_operations(self):
         return self.operations

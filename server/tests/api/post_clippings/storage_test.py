@@ -36,11 +36,23 @@ def test_replaces_clippings_by_key(clippings_collections, clippings):
         assert operation.filter == {'key': clippings['formatted'][i]['key']}
 
 
-@pytest.mark.skip(reason='TODO')
-def test_sets_given_clipping_values():
-    pass
+@mock_replace_one
+def test_sets_given_clipping_values(clippings_collections, clippings):
+    storage = Storage(clippings_collections)
+
+    storage.save(clippings['formatted'])
+
+    for i, operation in enumerate(clippings_collections.executed_operations()):
+        assert operation.replacement == clippings['formatted'][i]
 
 
-@pytest.mark.skip(reason='TODO')
-def test_returns_inserted_and_updated_clippings():
-    pass
+@mock_replace_one
+def test_returns_inserted_and_updated_clippings(clippings_collections, clippings):
+    storage = Storage(clippings_collections)
+
+    result = storage.save(clippings['formatted'])
+
+    assert result == {
+        'inserted': 7,
+        'updated': 14,
+    }

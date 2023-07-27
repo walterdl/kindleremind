@@ -6,11 +6,16 @@ class Storage:
         self.collection = clippings_collection
 
     def save(self, clippings):
-        self.collection.bulk_write(
+        result = self.collection.bulk_write(
             [self.replace_clipping(x) for x in clippings], ordered=False)
 
+        return {
+            'inserted': result.upserted_count,
+            'updated': result.modified_count,
+        }
+
     def replace_clipping(self, clipping):
-        return ReplaceOne(self._clipping_filter(clipping))
+        return ReplaceOne(self._clipping_filter(clipping), clipping)
 
     def _clipping_filter(self, clipping):
         return {'key': clipping['key']}
