@@ -17,18 +17,7 @@ class WriteClippingsService:
 
     def _add_keys(self, clippings):
         for clipping in clippings:
-            if not is_empty_str('content', clipping):
-                # Even the title is included in the key when the clipping has content;
-                # Book authors can coincidentally have same passages.
-                clipping["key"] = self.key_generator(
-                    clipping['content'] + clipping['title'])
-            else:
-                position = clipping['position']['location']
-                if 'page' in clipping['position']:
-                    position += clipping['position']['page']
-
-                clipping['key'] = self.key_generator(
-                    clipping['title'] + position)
+            clipping['key'] = self.key_generator.generate_key(clipping)
 
     def _timestamps_to_utc_datetime(self, clippings):
         for clipping in clippings:

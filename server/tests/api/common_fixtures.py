@@ -1,3 +1,4 @@
+import copy
 import pytest
 
 
@@ -25,10 +26,10 @@ def clippings():
         "type": "HIGHLIGHT"
     }
 
-    return {
+    return copy.deepcopy({
         "base": [base1, base2],
         "formatted": [
             {**base1, 'key': '1'},
             {**base2, 'key': '2'},
         ]
-    }
+    })
