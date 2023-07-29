@@ -7,6 +7,7 @@ class Storage:
 
     def save(self, clippings):
         result = self.collection.bulk_write(
+            # ordered=False to speed up the replacement processes
             [self.replace_clipping(x) for x in clippings], ordered=False)
 
         return {

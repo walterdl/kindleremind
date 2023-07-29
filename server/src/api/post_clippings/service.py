@@ -1,5 +1,5 @@
 import copy
-from .validator import validate_clippings, is_empty_str
+from .validator import validate_clippings
 from .dates import iso_to_utc_datetime
 
 
