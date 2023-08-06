@@ -1,3 +1,4 @@
 .env
 infrastructure/playground*.mongodb.js
 .vscode/tasks.json
+test.py
