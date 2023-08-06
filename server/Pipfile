@@ -7,11 +7,12 @@ name = "pypi"
 boto3 = "*"
 pymongo = "*"
 python-dotenv = "*"
+mmh3 = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-watch = "*"
 
 [requires]
-python_version = "3.10"
-python_full_version = "3.10.12"
+python_version = "3.11"
+python_full_version = "3.11.4"
