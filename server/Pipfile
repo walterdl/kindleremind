@@ -3,6 +3,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[scripts]
+requirements = "bash -c 'pipenv requirements > src/requirements.txt'"
+synth = "bash -c 'pipenv run requirements && cd infrastructure/cdk && cdk synth'"
+deploy = "bash -c 'cd infrastructure/cdk && cdk deploy'"
+
 [packages]
 boto3 = "*"
 pymongo = "*"
@@ -14,5 +19,4 @@ pytest = "*"
 pytest-watch = "*"
 
 [requires]
-python_version = "3.11"
 python_full_version = "3.11.4"

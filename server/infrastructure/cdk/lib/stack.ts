@@ -14,13 +14,10 @@ export class Stack extends cdk.Stack {
       this,
       "SaveClippingsFunction",
       {
-        entry: path.resolve(__dirname, "../../../"),
+        entry: path.resolve(__dirname, "../../../src"),
         runtime: lambda.Runtime.PYTHON_3_11,
-        index: "src/api/post_clippings/handler.py",
+        index: "kindleremind/api/post_clippings/handler.py",
         handler: "lambda_handler",
-        bundling: {
-          assetExcludes: ["infrastructure", ".env", ".vscode"],
-        },
       }
     );
 

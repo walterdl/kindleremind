@@ -1,5 +1,5 @@
 from datetime import datetime
-from api.post_clippings.dates import iso_to_utc_datetime
+from kindleremind.api.post_clippings.dates import iso_to_utc_datetime
 
 
 def test_iso_to_utc_datetime_with_tz():

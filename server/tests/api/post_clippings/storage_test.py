@@ -1,7 +1,6 @@
-from api.post_clippings.storage import Storage
+from kindleremind.api.post_clippings.storage import Storage
 from .storage_data import clippings_collections,  DummyReplaceOne, mock_replace_one
 from tests.api.common_fixtures import clippings
-import pytest
 
 
 @mock_replace_one

@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock
-from api.post_clippings.service import WriteClippingsService
+from kindleremind.api.post_clippings.service import WriteClippingsService
 
 
 _base_clipping = {

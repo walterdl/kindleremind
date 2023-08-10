@@ -2,3 +2,5 @@
 infrastructure/playground*.mongodb.js
 .vscode/tasks.json
 test.py
+**/__pycache__
+src/requirements.txt

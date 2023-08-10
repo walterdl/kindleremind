@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock
-from api.post_clippings.key_generator import ClippingKeyGenerator
+from kindleremind.api.post_clippings.key_generator import ClippingKeyGenerator
 from tests.api.common_fixtures import clippings
 
 

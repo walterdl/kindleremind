@@ -19,7 +19,7 @@ def mock_replace_one(func):
     A custom decorator to mock pymongo.ReplaceOne with DummyReplaceOne.
     """
     patched_func = patch(
-        'api.post_clippings.storage.ReplaceOne', DummyReplaceOne)(func)
+        'kindleremind.api.post_clippings.storage.ReplaceOne', DummyReplaceOne)(func)
 
     return patched_func
 
