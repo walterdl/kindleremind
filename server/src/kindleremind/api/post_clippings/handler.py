@@ -1,7 +1,14 @@
-def lambda_handler(event):
-    print('The event from the lambda handler', event)
+import json
+
+
+def lambda_handler(event, context=None):
+    json_body = json.loads(event['body'])
+    print('json_body', json_body)
 
     return {
-        'statusCode': 200,
-        'body': 'Hello from Lambda'
+        'statusCode': 201,
+        'body': json.dumps({'message': 'Hello from Lambda!'}),
+        'headers': {
+            'Content-Type': 'application/json',
+        }
     }
