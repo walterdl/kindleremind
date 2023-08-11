@@ -3,6 +3,8 @@
 from importlib import import_module
 from flask import Flask, request
 from endpoints import endpoints
+import traceback
+
 
 app = Flask(__name__)
 
@@ -15,8 +17,13 @@ for endpoint in endpoints:
         try:
             response = handler_func(build_event())
             return response['body'], response['statusCode'], response['headers']
-        except Exception as e:
-            return str(e), 500, {'Content-Type': 'text/plain'}
+        except Exception as error:
+            body = {
+                'error': str(error),
+                'traceback': traceback.format_exception(error)
+            }
+
+            return body, 500, {'Content-Type': 'application/json'}
 
 
 def build_event():
