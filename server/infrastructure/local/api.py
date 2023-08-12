@@ -8,11 +8,14 @@ import traceback
 
 app = Flask(__name__)
 
-for endpoint in endpoints:
-    @app.route(endpoint['route'], methods=[endpoint['method']])
+for path in endpoints:
+    methods = list(endpoints[path].keys())
+
+    @app.route(path, methods=methods)
     def handler():
-        handler_module = import_module(endpoint['handler_module'])
-        handler_func = getattr(handler_module, endpoint['handler_func'])
+        endpoint_config = endpoints[path][request.method.lower()]
+        handler_module = import_module(endpoint_config['handler_module'])
+        handler_func = getattr(handler_module, endpoint_config['handler_func'])
 
         try:
             response = handler_func(build_event())
