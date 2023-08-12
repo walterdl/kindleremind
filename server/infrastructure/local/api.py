@@ -4,29 +4,32 @@ from importlib import import_module
 from flask import Flask, request
 from endpoints import endpoints
 import traceback
+import json
 
 
 app = Flask(__name__)
 
 for path in endpoints:
-    methods = list(endpoints[path].keys())
+    for method in endpoints[path].keys():
 
-    @app.route(path, methods=methods)
-    def handler():
-        endpoint_config = endpoints[path][request.method.lower()]
-        handler_module = import_module(endpoint_config['handler_module'])
-        handler_func = getattr(handler_module, endpoint_config['handler_func'])
+        @app.route(path, methods=[method.upper()], endpoint=f"{path}_{method}")
+        def handler(path=path):
+            endpoint_config = endpoints[path][request.method.lower()]
+            handler_module = import_module(endpoint_config['handler_module'])
+            handler_func = getattr(
+                handler_module, endpoint_config['handler_func'])
 
-        try:
-            response = handler_func(build_event())
-            return response['body'], response['statusCode'], response['headers']
-        except Exception as error:
-            body = {
-                'error': str(error),
-                'traceback': traceback.format_exception(error)
-            }
+            try:
+                response = handler_func(build_event())
 
-            return body, 500, {'Content-Type': 'application/json'}
+                return format_lambda_response(response, endpoint_config)
+            except Exception as error:
+                body = {
+                    'error': str(error),
+                    'traceback': traceback.format_exception(error)
+                }
+
+                return body, 500, {'Content-Type': 'application/json'}
 
 
 def build_event():
@@ -47,3 +50,12 @@ def build_event():
         'body': request.data.decode('utf-8'),
         'isBase64Encoded': False
     }
+
+
+def format_lambda_response(response, endpoint_config):
+    response_type = endpoint_config.get('response_type', 'lambda_proxy')
+    if (response_type == 'lambda_proxy'):
+        return response['body'], response['statusCode'], response['headers']
+
+    body = json.dumps(response) if response else "{}"
+    return body, 200, {'Content-Type': 'application/json'}
