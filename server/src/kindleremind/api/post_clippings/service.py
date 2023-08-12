@@ -13,7 +13,8 @@ class WriteClippingsService:
         clippings = copy.deepcopy(clippings)
         self._add_keys(clippings)
         self._timestamps_to_utc_datetime(clippings)
-        self.storage.save(clippings)
+
+        return self.storage.save(clippings)
 
     def _add_keys(self, clippings):
         for clipping in clippings:

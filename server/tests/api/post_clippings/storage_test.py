@@ -26,6 +26,16 @@ def test_saves_clippings_in_replace_operation(clippings_collections, clippings):
 
 
 @mock_replace_one
+def test_saves_clippings_with_upsert_on(clippings_collections, clippings):
+    storage = Storage(clippings_collections)
+
+    storage.save(clippings['formatted'])
+
+    for operation in storage.collection.executed_operations():
+        assert operation.upsert == True
+
+
+@mock_replace_one
 def test_replaces_clippings_by_key(clippings_collections, clippings):
     storage = Storage(clippings_collections)
 

@@ -16,7 +16,7 @@ class Storage:
         }
 
     def replace_clipping(self, clipping):
-        return ReplaceOne(self._clipping_filter(clipping), clipping)
+        return ReplaceOne(self._clipping_filter(clipping), clipping, upsert=True)
 
     def _clipping_filter(self, clipping):
         return {'key': clipping['key']}
