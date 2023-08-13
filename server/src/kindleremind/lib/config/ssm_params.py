@@ -59,7 +59,6 @@ def get_ssm_values():
     global _instance
 
     if _instance is None:
-        print('DEBUG the env', os.environ.get('ENV'))
         if os.environ.get('ENV') == 'TEST':
             _instance = DummySsmValues()
         else:
