@@ -7,11 +7,10 @@ name = "pypi"
 requirements = "bash -c 'pipenv requirements > src/requirements.txt'"
 synth = "bash -c 'pipenv run requirements && cd infrastructure/cdk && cdk synth'"
 deploy = "bash -c 'cd infrastructure/cdk && cdk deploy'"
-local = "bash -c 'cd infrastructure/local && flask --app api run --extra-files ../../src/**/*.py'"
+local = "bash -c 'cd infrastructure/local && flask --app api run --extra-files ../../src/**/*.py --debug --port 5001'"
 tw = "bash -c 'ptw'"
 
 [packages]
-boto3 = "*"
 pymongo = "*"
 python-dotenv = "*"
 mmh3 = "*"
@@ -20,6 +19,8 @@ mmh3 = "*"
 pytest = "*"
 pytest-watch = "*"
 flask = "*"
+boto3 = "*"
+pytest-dotenv = "*"
 
 [requires]
 python_full_version = "3.11.4"
