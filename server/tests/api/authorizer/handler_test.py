@@ -12,7 +12,7 @@ class DummyConfig():
 def test_returns_false_if_token_is_not_valid():
     result = lambda_handler({
         'headers': {
-            'Authorization': 'A different auth token'
+            'authorization': 'A different auth token'
         }
     })
 
@@ -23,7 +23,7 @@ def test_returns_false_if_token_is_not_valid():
 def test_returns_true_if_token_is_not_valid(config):
     result = lambda_handler({
         'headers': {
-            'Authorization': config.authorizer_token
+            'authorization': config.authorizer_token
         }
     })
 

@@ -12,7 +12,6 @@ tw = "bash -c 'ptw'"
 
 [packages]
 pymongo = "*"
-python-dotenv = "*"
 mmh3 = "*"
 
 [dev-packages]
@@ -21,6 +20,7 @@ pytest-watch = "*"
 flask = "*"
 boto3 = "*"
 pytest-dotenv = "*"
+python-dotenv = "*"
 
 [requires]
 python_full_version = "3.11.4"

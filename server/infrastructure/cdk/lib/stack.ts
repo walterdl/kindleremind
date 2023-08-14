@@ -8,8 +8,9 @@ import {
   HttpLambdaAuthorizer,
   HttpLambdaResponseType,
 } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
-
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+
+import { SSM_PARAM_NAMES, SsmParams } from "./ssm-params";
 
 export class Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -23,12 +24,32 @@ export class Stack extends cdk.Stack {
         runtime: lambda.Runtime.PYTHON_3_11,
         index: "kindleremind/api/post_clippings/handler.py",
         handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+        },
       }
     );
-
     const saveClippingsIntegration = new HttpLambdaIntegration(
       "SaveClippingsIntegration",
       saveClippingsFunction
+    );
+
+    const getClippingsFunction = new python.PythonFunction(
+      this,
+      "GetClippingsFunction",
+      {
+        entry: path.resolve(__dirname, "../../../src"),
+        runtime: lambda.Runtime.PYTHON_3_11,
+        index: "kindleremind/api/get_clippings/handler.py",
+        handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+        },
+      }
+    );
+    const getClippingsIntegration = new HttpLambdaIntegration(
+      "getClippingsIntegration",
+      getClippingsFunction
     );
 
     const authorizerFunction = new python.PythonFunction(
@@ -39,6 +60,10 @@ export class Stack extends cdk.Stack {
         runtime: lambda.Runtime.PYTHON_3_11,
         index: "kindleremind/api/authorizer/handler.py",
         handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+          // AUTHORIZER_TOKEN: TODO
+        },
       }
     );
     const authorizer = new HttpLambdaAuthorizer(
@@ -50,6 +75,14 @@ export class Stack extends cdk.Stack {
         resultsCacheTtl: cdk.Duration.minutes(40),
       }
     );
+
+    const ssmParams = new SsmParams(this, "SsmParams");
+    ssmParams.grantRead([
+      saveClippingsFunction,
+      getClippingsFunction,
+      authorizerFunction,
+    ]);
+
     const httpApi = new apigwv2.HttpApi(this, "HttpApi", {
       apiName: "KindleRemindApi",
       createDefaultStage: false,
@@ -59,11 +92,17 @@ export class Stack extends cdk.Stack {
     new apigwv2.HttpStage(this, "Stage", {
       httpApi,
       stageName: "v1",
+      autoDeploy: true,
     });
     httpApi.addRoutes({
       path: "/clippings",
       methods: [apigwv2.HttpMethod.POST],
       integration: saveClippingsIntegration,
+    });
+    httpApi.addRoutes({
+      path: "/clippings",
+      methods: [apigwv2.HttpMethod.GET],
+      integration: getClippingsIntegration,
     });
   }
 }
