@@ -8,7 +8,6 @@ returning them in an array of dictionaries.
 import kindleremind.clippings.raw_abstractor as raw_abstractor
 from kindleremind.clippings.header import parse_header
 from kindleremind.clippings.metadata import parse_metadata
-import kindleremind.json_printer as json_printer
 
 
 def parse(file_path):
@@ -39,10 +38,10 @@ def parse(file_path):
         except Exception:
             skipped += 1
 
-    json_printer.print({
+    return {
         "clippings": clippings,
         "skipped": skipped,
-    })
+    }
 
 
 def _parse_raw_clipping(raw_clipping):

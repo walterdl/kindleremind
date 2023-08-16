@@ -2,9 +2,9 @@ from enum import Enum
 import json
 
 
-def print(thing):
+def print_to_file(clippings):
     with open('data/result.json', '+w', encoding='utf-8') as results_file:
-        results_file.write(to_json(thing))
+        results_file.write(to_json(clippings))
 
 
 def to_json(thing):
