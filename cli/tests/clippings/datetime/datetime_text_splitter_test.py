@@ -1,5 +1,5 @@
 import pytest
-from clippings.datetime import _split_es_datetime, _split_en_datetime
+from kindleremind.clippings.datetime import _split_es_datetime, _split_en_datetime
 
 
 @pytest.fixture()

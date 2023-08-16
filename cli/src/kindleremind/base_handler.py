@@ -1,4 +1,4 @@
-from exceptions import AppException
+from kindleremind.exceptions import AppException
 
 
 def handleCommand(args):

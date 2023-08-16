@@ -2,7 +2,7 @@ import pytest
 from datetime import datetime
 import dateutil.tz as tz
 
-from clippings.datetime import get_datetime
+from kindleremind.clippings.datetime import get_datetime
 
 
 @pytest.fixture()

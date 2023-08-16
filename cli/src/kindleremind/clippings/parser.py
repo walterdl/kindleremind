@@ -5,10 +5,10 @@ Given a file path to a clippings file, this module abstracts the clippings,
 returning them in an array of dictionaries.
 """
 
-import clippings.raw_abstractor as raw_abstractor
-from clippings.header import parse_header
-from clippings.metadata import parse_metadata
-import json_printer
+import kindleremind.clippings.raw_abstractor as raw_abstractor
+from kindleremind.clippings.header import parse_header
+from kindleremind.clippings.metadata import parse_metadata
+import kindleremind.json_printer as json_printer
 
 
 def parse(file_path):

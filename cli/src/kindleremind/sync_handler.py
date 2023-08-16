@@ -1,7 +1,7 @@
 import os
 
-from exceptions import AppException
-import clippings.parser as clippings_parser
+from kindleremind.exceptions import AppException
+import kindleremind.clippings.parser as clippings_parser
 
 
 def handler(args):

@@ -1,4 +1,4 @@
-import clippings.cleaner as cleaner
+import kindleremind.clippings.cleaner as cleaner
 
 
 def test_remove_initial_white_spaces():

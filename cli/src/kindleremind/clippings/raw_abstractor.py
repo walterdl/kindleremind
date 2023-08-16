@@ -1,4 +1,4 @@
-import clippings.cleaner as cleaner
+import kindleremind.clippings.cleaner as cleaner
 
 
 def abstract_raw_clippings(file_path):

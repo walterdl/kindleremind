@@ -2,7 +2,7 @@ import pytest
 import locale
 from datetime import datetime
 
-from clippings.datetime import _month_number
+from kindleremind.clippings.datetime import _month_number
 
 
 @pytest.fixture()

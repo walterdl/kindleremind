@@ -1,6 +1,6 @@
 import pytest
 
-from clippings.header import parse_header
+from kindleremind.clippings.header import parse_header
 
 
 @pytest.fixture()

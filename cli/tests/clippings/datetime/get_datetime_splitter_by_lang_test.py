@@ -1,4 +1,4 @@
-from clippings.datetime import _get_datetime_splitter_by_lang, _split_es_datetime, _split_en_datetime
+from kindleremind.clippings.datetime import _get_datetime_splitter_by_lang, _split_es_datetime, _split_en_datetime
 
 
 def test_provide_the_correct_spanish_splitter():

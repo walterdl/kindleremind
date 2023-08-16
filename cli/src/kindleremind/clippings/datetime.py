@@ -1,7 +1,7 @@
 from datetime import date
 from datetime import datetime
 import dateutil.tz as tz
-from clippings.months import SPANISH_MONTHS
+from kindleremind.clippings.months import SPANISH_MONTHS
 
 
 def get_datetime(text):
