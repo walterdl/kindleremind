@@ -1,14 +1,14 @@
 from kindleremind.exceptions import AppException
 
 
-def handleCommand(args):
+def handle_command(args):
     try:
         args.handler(args)
     except Exception as e:
-        printAndExit(e, args.debug)
+        print_and_exit(e, args.debug)
 
 
-def printAndExit(error, debug=False):
+def print_and_exit(error, debug=False):
     if isinstance(error, AppException):
         print(error if debug else error.message)
     else:

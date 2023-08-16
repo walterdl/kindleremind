@@ -32,4 +32,4 @@ syncCommand.add_argument(
 syncCommand.set_defaults(handler=sync_handler.handler)
 
 args = parser.parse_args()
-base_handler.handleCommand(args)
+base_handler.handle_command(args)
