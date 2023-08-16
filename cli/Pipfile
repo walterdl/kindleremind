@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 python-dateutil = "*"
+requests = "*"
 
 [dev-packages]
 pytest = "*"
@@ -12,4 +13,3 @@ pytest-watch = "*"
 
 [requires]
 python_version = "3.11"
-python_full_version = "3.11.3"
