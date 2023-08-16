@@ -4,14 +4,14 @@ import json
 
 def print_to_file(clippings):
     with open('data/result.json', '+w', encoding='utf-8') as results_file:
-        results_file.write(to_json(clippings))
+        results_file.write(_to_json(clippings))
 
 
-def to_json(thing):
-    return json.dumps(thing, indent=2, sort_keys=True, default=custom_encoder)
+def _to_json(thing):
+    return json.dumps(thing, indent=2, sort_keys=True, default=_custom_encoder)
 
 
-def custom_encoder(obj):
+def _custom_encoder(obj):
     if isinstance(obj, Enum):
         return obj.name
     raise TypeError(
