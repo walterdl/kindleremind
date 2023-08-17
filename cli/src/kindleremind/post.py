@@ -28,7 +28,7 @@ def _is_not_2xx(response):
 def _error_message(response):
     try:
         message = response.json()['message']
-
-        return message
     except Exception:
-        return response.text
+        message = response.text
+
+    return 'Error posting clippings: {}'.format(message)

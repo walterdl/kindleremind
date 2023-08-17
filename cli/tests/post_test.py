@@ -78,7 +78,7 @@ def test_throws_exception_with_server_message_if_there_is_any(requests, clipping
     with pytest.raises(Exception) as exception:
         send_clippings(clippings)
 
-    assert str(exception.value) == 'Dummy error message'
+    assert str(exception.value) == 'Error posting clippings: Dummy error message'
 
 
 def test_throws_exception_with_response_text_if_there_is_no_server_message(clippings, requests):
@@ -90,4 +90,5 @@ def test_throws_exception_with_response_text_if_there_is_no_server_message(clipp
     with pytest.raises(Exception) as exception:
         send_clippings(clippings)
 
-    assert str(exception.value) == response_text
+    assert str(exception.value) == 'Error posting clippings: {}'.format(
+        response_text)
