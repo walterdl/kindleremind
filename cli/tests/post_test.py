@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch, Mock
 from requests.exceptions import JSONDecodeError
 from kindleremind.post import send_clippings
+from kindleremind.clippings.json import marshall
 
 
 @pytest.fixture()
@@ -43,10 +44,17 @@ def test_sends_to_the_server_url(config, requests, clippings):
     assert url == config.server_url
 
 
-def test_sends_as_json(requests, clippings):
+def test_sends_clippings_as_json_encoded(requests, clippings):
     send_clippings(clippings)
-    json_data = requests.mock_calls[0].kwargs['json']
-    json_data == clippings
+    json_data = requests.mock_calls[0].kwargs['data']
+    assert json_data == marshall(clippings)
+
+
+def test_sends_json_content_type_header(requests, clippings):
+    send_clippings(clippings)
+    headers = requests.mock_calls[0].kwargs['headers']
+
+    assert headers['Content-Type'] == 'application/json'
 
 
 def test_sends_the_authorization_token(config, requests, clippings):

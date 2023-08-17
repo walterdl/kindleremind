@@ -1,13 +1,24 @@
 import requests
 from .config import config
+from .clippings.json import marshall
 
 
 def send_clippings(clippings):
-    response = requests.post(config.server_url, json=clippings, headers={
-        'Authorization': config.server_api_key})
+    response = requests.post(
+        config.server_url,
+        data=marshall(clippings),
+        headers=_headers()
+    )
 
     if _is_not_2xx(response):
         raise Exception(_error_message(response))
+
+
+def _headers():
+    return {
+        'Authorization': config.server_api_key,
+        'Content-Type': 'application/json'
+    }
 
 
 def _is_not_2xx(response):
