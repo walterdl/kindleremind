@@ -6,11 +6,10 @@ from kindleremind.print_to_file import print_to_file
 from .post import send_clippings
 
 
-def handler(args):
-    file = args.file[0]
-    _check_file_existence(file)
-    result = clippings_parser.parse(file)
-    _print_result(result)
+def handler(options):
+    _check_file_existence(options.file)
+    result = clippings_parser.parse(options.file)
+    _print_result(result, options.output)
     print('Sending clippings to server...')
     send_clippings(result['clippings'])
     print('Done!')
@@ -21,7 +20,8 @@ def _check_file_existence(path):
         raise AppException('File does not exist.')
 
 
-def _print_result(result):
+def _print_result(result, path=None):
     print('Parsed clippings = {}\nSkipped = {}'.format(
         len(result['clippings']), result['skipped']))
-    print_to_file(result)
+    if path:
+        print_to_file(result, path)

@@ -18,16 +18,21 @@ syncCommand = subparser.add_parser(
 syncCommand.add_argument(
     '-f', '--file',
     help='Absolute or relative path from where the program is run to the file containing the highlights. (default: %(default)s)',
-    default=['./My Clippings.txt'],
+    default='./My Clippings.txt',
     required=False,
-    nargs=1,
-    type=str
+    type=str,
 )
 syncCommand.add_argument(
     '-d', '--debug',
     help='Whether or not print error details. (default: %(default)s)',
     action='store_true',
     required=False,
+)
+syncCommand.add_argument(
+    '-o', '--output',
+    help='Absolute or relative path where the parsed clippings in JSON format should be saved.',
+    required=False,
+    type=str
 )
 syncCommand.set_defaults(handler=sync_handler.handler)
 
