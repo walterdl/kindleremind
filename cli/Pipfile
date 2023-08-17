@@ -3,6 +3,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[scripts]
+tw = "bash -c 'ptw'"
+
 [packages]
 python-dateutil = "*"
 requests = "*"
