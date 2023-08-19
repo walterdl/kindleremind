@@ -1,11 +1,11 @@
 import requests
-from .config import config
+from .config import get_config
 from .clippings.json import marshall
 
 
 def send_clippings(clippings):
     response = requests.post(
-        config.server_url,
+        get_config().server_url,
         data=marshall(clippings),
         headers=_headers()
     )
@@ -16,7 +16,7 @@ def send_clippings(clippings):
 
 def _headers():
     return {
-        'Authorization': config.server_api_key,
+        'Authorization': get_config().server_api_key,
         'Content-Type': 'application/json'
     }
 
