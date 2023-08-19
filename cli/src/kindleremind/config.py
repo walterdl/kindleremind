@@ -6,12 +6,12 @@ var_sources = {
     'server_url': {
         'env': 'SERVER_URL',
         'config_file': 'serverUrl',
-        'cli_arg': 'server-url'
+        'cli_arg': 'server_url'
     },
     'server_api_key': {
         'env': 'SERVER_API_KEY',
         'config_file': 'serverApiKey',
-        'cli_arg': 'server-api-key'
+        'cli_arg': 'server_api_key'
     },
 }
 
@@ -77,14 +77,15 @@ class _Config():
         return result
 
 
-_cache = None
+# type: _Config
+config = None
 
 
-def get_config(cli_args={}):
-    global _cache
+def init_config(cli_args={}):
+    global config
 
-    if _cache:
-        return _cache
+    if config:
+        return
 
     if environ.get('ENV') == 'TEST':
         # For testing purposes use dummy values.
@@ -92,5 +93,4 @@ def get_config(cli_args={}):
         for var_name in var_sources:
             cli_args[var_sources[var_name]['cli_arg']] = 'test_' + var_name
 
-    _cache = _Config(cli_args)
-    return _cache
+    config = _Config(cli_args)

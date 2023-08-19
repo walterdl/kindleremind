@@ -34,6 +34,18 @@ syncCommand.add_argument(
     required=False,
     type=str
 )
+syncCommand.add_argument(
+    '--server-url',
+    help='URL of the API.',
+    required=False,
+    type=str
+)
+syncCommand.add_argument(
+    '--server-api-key',
+    required=False,
+    type=str
+)
+
 syncCommand.set_defaults(handler=sync_handler.handler)
 
 args = parser.parse_args()
