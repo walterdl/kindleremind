@@ -1,6 +1,5 @@
 import os
 
-from .config import init_config
 from kindleremind.exceptions import AppException
 import kindleremind.clippings.parser as clippings_parser
 from kindleremind.print_to_file import print_to_file
@@ -8,7 +7,6 @@ from .post import send_clippings
 
 
 def handler(options):
-    init_config(options)
     _check_file_existence(options.file)
     result = clippings_parser.parse(options.file)
     _print_result(result, options.output)
