@@ -62,7 +62,6 @@ export class Stack extends cdk.Stack {
         handler: "lambda_handler",
         environment: {
           ...SSM_PARAM_NAMES,
-          // AUTHORIZER_TOKEN: TODO
         },
       }
     );

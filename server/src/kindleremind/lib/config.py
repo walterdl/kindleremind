@@ -27,7 +27,9 @@ def get_config(name):
     if name in get_config._cache:
         return get_config._cache[name]
 
-    get_config._cache[name] = _get_ssm_value(config_sources['ssm_env_var'])
+    get_config._cache[name] = _get_ssm_value(
+        environ.get(config_sources['ssm_env_var'])
+    )
 
     return get_config._cache[name]
 

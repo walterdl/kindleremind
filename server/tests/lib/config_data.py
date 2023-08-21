@@ -5,7 +5,12 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def clean_env_vars():
-    with patch.dict('kindleremind.lib.config.environ', dict(), clear=True) as environ:
+    env_vars = {}
+    for name in NAMES:
+        ssm_env_var_name = NAMES[name]['ssm_env_var']
+        env_vars[ssm_env_var_name] = ssm_env_var_name
+
+    with patch.dict('kindleremind.lib.config.environ', env_vars, clear=True) as environ:
         yield environ
 
 

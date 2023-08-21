@@ -11,7 +11,8 @@ def test_uses_hardcoded_values_if_env_is_test(clean_env_vars):
 
 def test_uses_ssm_values_by_default(ssm_client):
     for name in NAMES:
-        assert get_config(name) == ssm_value(NAMES[name]['ssm_env_var'])
+        ssm_env_var_name = NAMES[name]['ssm_env_var']
+        assert get_config(name) == ssm_value(ssm_env_var_name)
 
 
 def test_gets_secure_ssm_params_with_correct_arguments(ssm_client):
