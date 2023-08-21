@@ -1,6 +1,6 @@
-from kindleremind.lib.config import config
+from kindleremind.lib.config import get_config
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-client = MongoClient(config.mongodb_uri, server_api=ServerApi('1'))
+client = MongoClient(get_config('mongodb_uri'), server_api=ServerApi('1'))
 clippings = client.kindleremind.clippings

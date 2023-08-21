@@ -3,12 +3,13 @@ from unittest.mock import patch
 from kindleremind.api.authorizer.handler import lambda_handler
 
 
-class DummyConfig():
-    def __init__(self):
-        self.authorizer_token = 'Dummy auth token'
+@pytest.fixture(autouse=True)
+def dummy_token():
+    token = 'Dummy auth token'
+    with patch('kindleremind.api.authorizer.handler.get_config', lambda _: token):
+        yield token
 
 
-@patch('kindleremind.api.authorizer.handler.config', DummyConfig())
 def test_returns_false_if_token_is_not_valid():
     result = lambda_handler({
         'headers': {
@@ -19,11 +20,10 @@ def test_returns_false_if_token_is_not_valid():
     assert result['isAuthorized'] == False
 
 
-@patch('kindleremind.api.authorizer.handler.config', new_callable=DummyConfig)
-def test_returns_true_if_token_is_not_valid(config):
+def test_returns_true_if_token_is_not_valid(dummy_token):
     result = lambda_handler({
         'headers': {
-            'authorization': config.authorizer_token
+            'authorization': dummy_token
         }
     })
 

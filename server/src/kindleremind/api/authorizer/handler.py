@@ -1,7 +1,7 @@
-from kindleremind.lib.config import config
+from kindleremind.lib.config import get_config
 
 
 def lambda_handler(event=None, context=None):
     return {
-        'isAuthorized': event['headers']['authorization'] == config.authorizer_token
+        'isAuthorized': event['headers']['authorization'] == get_config('api_key')
     }
