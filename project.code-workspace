@@ -5,7 +5,10 @@
       "path": "server"
     },
     {
-      "path": "cli"
+      "path": "clients/cli"
+    },
+    {
+      "path": "clients/mobile-app"
     }
   ]
 }
