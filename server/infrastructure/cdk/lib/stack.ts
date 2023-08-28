@@ -52,6 +52,17 @@ export class Stack extends cdk.Stack {
       getClippingsFunction
     );
 
+    const statusFunction = new python.PythonFunction(this, "statusFunction", {
+      entry: path.resolve(__dirname, "../../../src"),
+      runtime: lambda.Runtime.PYTHON_3_11,
+      index: "kindleremind/api/status.py",
+      handler: "handler",
+    });
+    const statusIntegration = new HttpLambdaIntegration(
+      "statusIntegration",
+      statusFunction
+    );
+
     const authorizerFunction = new python.PythonFunction(
       this,
       "AuthorizerFunction",
@@ -102,6 +113,11 @@ export class Stack extends cdk.Stack {
       path: "/clippings",
       methods: [apigwv2.HttpMethod.GET],
       integration: getClippingsIntegration,
+    });
+    httpApi.addRoutes({
+      path: "/status",
+      methods: [apigwv2.HttpMethod.GET],
+      integration: statusIntegration,
     });
   }
 }
