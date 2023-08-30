@@ -4,7 +4,7 @@ import {Input, Button, makeStyles} from '@rneui/themed';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useSubmitApiKey} from './useSubmitApiKey';
-import {ErrorMessage} from '../components/ErrorMessage';
+import {ErrorMessage} from '../../components/ErrorMessage';
 
 const schema = yup.object({
   apiKey: yup.string().trim().required('API Key is required'),

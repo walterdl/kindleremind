@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {initialTheme, useNavigationTheme} from './theme';
-import {Authenticator} from './Authenticator';
+import {Authenticator} from './core/Authenticator';
 
 const Stack = createNativeStackNavigator();
 
