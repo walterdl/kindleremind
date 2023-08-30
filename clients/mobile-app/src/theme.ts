@@ -11,6 +11,7 @@ export const initialTheme = createTheme({
     grey2: '#d6dce1',
     grey1: '#e5ebf1',
     grey0: '#eef4f9',
+    error: '#ec4631',
   },
   mode: 'dark',
 });

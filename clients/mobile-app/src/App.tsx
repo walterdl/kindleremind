@@ -1,12 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import {ThemeProvider} from '@rneui/themed';
+import {ThemeProvider, makeStyles} from '@rneui/themed';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -27,12 +20,19 @@ function App(): JSX.Element {
   );
 }
 
+const useStyles = makeStyles(theme => ({
+  sceneContent: {
+    padding: theme.spacing.md,
+  },
+}));
+
 function AppNavigation(): JSX.Element {
   const navigationTheme = useNavigationTheme();
+  const styles = useStyles();
 
   return (
     <NavigationContainer theme={navigationTheme}>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{contentStyle: styles.sceneContent}}>
         <Stack.Screen name={ScreenNames.Login} component={Authenticator} />
       </Stack.Navigator>
     </NavigationContainer>
