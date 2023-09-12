@@ -1,15 +1,10 @@
 import React from 'react';
 import {makeStyles, Button} from '@rneui/themed';
-import {useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {
-  PrivateRootStackParamList,
-  PrivateRootScreenNames,
-  PrivateRootScreenNavigationProp,
-} from './types';
+import {PrivateRootStackParamList, PrivateRootScreenNames} from './types';
 import {Home} from '../Home';
-import {useDeleteApiKey} from '../apiKeyStore';
+import {useLogout} from '../Authenticator';
 
 const Stack = createNativeStackNavigator<PrivateRootStackParamList>();
 
@@ -35,12 +30,7 @@ export function PrivateRoot() {
 }
 
 function HeaderRight() {
-  const navigation = useNavigation<PrivateRootScreenNavigationProp>();
-  const deleteApiKey = useDeleteApiKey();
-  const logout = async () => {
-    await deleteApiKey();
-    navigation.popToTop();
-  };
+  const logout = useLogout();
 
   return (
     <Button type="clear" onPress={logout}>

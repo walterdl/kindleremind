@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {useNavigationTheme} from '../../theme';
-import {Authenticator} from '../Authenticator';
+import {Authenticator, CheckAuthentication} from '../Authenticator';
 import {PrivateRoot} from './PrivateRoot';
 import {RootScreenNames, RootStackParamList} from './types';
 
@@ -14,7 +14,11 @@ export function AppNavigation(): JSX.Element {
 
   return (
     <NavigationContainer theme={navigationTheme}>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName={RootScreenNames.CheckLogin}>
+        <Stack.Screen
+          name={RootScreenNames.CheckLogin}
+          component={CheckAuthentication}
+        />
         <Stack.Screen name={RootScreenNames.Login} component={Authenticator} />
         <Stack.Screen
           name={RootScreenNames.PrivateRoot}
