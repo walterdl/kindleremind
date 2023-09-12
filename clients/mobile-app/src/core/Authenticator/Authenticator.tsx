@@ -1,21 +1,24 @@
 import React, {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import Config from 'react-native-config';
-import secureStore from 'react-native-sensitive-info';
 import {Input, Button, makeStyles} from '@rneui/themed';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 
-import {ScreenNames, RootStackParamList} from '../Navigation';
+import {RootScreenNames, RootStackParamList} from '../Navigation';
 import {useSubmitApiKey} from './useSubmitApiKey';
 import {ErrorMessage} from '../../components/ErrorMessage';
+import {useSaveApiKey} from '../apiKeyStore';
 
 const schema = yup.object({
   apiKey: yup.string().trim().required('API Key is required'),
 });
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing.md,
+  },
   errorMessage: {
     marginBottom: theme.spacing.lg,
   },
@@ -24,13 +27,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-type Props = NativeStackScreenProps<RootStackParamList, ScreenNames.Login>;
+type Props = NativeStackScreenProps<RootStackParamList, RootScreenNames.Login>;
 
 export function Authenticator(props: Props) {
   const styles = useStyles();
   const submitApiKey = useSubmitApiKey();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const saveApiKey = useSaveApiKey();
 
   const submit = useCallback(
     async (apiKey: string) => {
@@ -40,8 +44,8 @@ export function Authenticator(props: Props) {
         const isValid = await submitApiKey(apiKey);
 
         if (isValid) {
-          await secureStore.setItem('apiKey', apiKey, {});
-          return props.navigation.navigate(ScreenNames.Home);
+          await saveApiKey(apiKey);
+          return props.navigation.navigate(RootScreenNames.PrivateRoot);
         }
 
         setError('Invalid API Key');
@@ -51,13 +55,13 @@ export function Authenticator(props: Props) {
         setLoading(false);
       }
     },
-    [props.navigation, submitApiKey],
+    [props.navigation, saveApiKey, submitApiKey],
   );
 
   const showApiKeyButton = Config.IS_DEV === 'true';
 
   return (
-    <View>
+    <View style={styles.root}>
       <Formik
         initialValues={{apiKey: ''}}
         validationSchema={schema}
