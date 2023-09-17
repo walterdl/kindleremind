@@ -86,11 +86,49 @@ export class Stack extends cdk.Stack {
       }
     );
 
+    const postPushTokenFunction = new python.PythonFunction(
+      this,
+      "PostPushTokenFunction",
+      {
+        entry: path.resolve(__dirname, "../../../src"),
+        runtime: lambda.Runtime.PYTHON_3_11,
+        index: "kindleremind/api/post_push_token/handler.py",
+        handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+        },
+      }
+    );
+    const postPushTokenIntegration = new HttpLambdaIntegration(
+      "PostPushTokenIntegration",
+      postPushTokenFunction
+    );
+
+    const deletePushTokenFunction = new python.PythonFunction(
+      this,
+      "DeletePushTokenFunction",
+      {
+        entry: path.resolve(__dirname, "../../../src"),
+        runtime: lambda.Runtime.PYTHON_3_11,
+        index: "kindleremind/api/delete_push_token/handler.py",
+        handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+        },
+      }
+    );
+    const deletePushTokenIntegration = new HttpLambdaIntegration(
+      "DeletePushTokenIntegration",
+      deletePushTokenFunction
+    );
+
     const ssmParams = new SsmParams(this, "SsmParams");
     ssmParams.grantRead([
       saveClippingsFunction,
       getClippingsFunction,
       authorizerFunction,
+      postPushTokenFunction,
+      deletePushTokenFunction,
     ]);
 
     const httpApi = new apigwv2.HttpApi(this, "HttpApi", {
@@ -118,6 +156,16 @@ export class Stack extends cdk.Stack {
       path: "/status",
       methods: [apigwv2.HttpMethod.GET],
       integration: statusIntegration,
+    });
+    httpApi.addRoutes({
+      path: "/push-token",
+      methods: [apigwv2.HttpMethod.POST],
+      integration: postPushTokenIntegration,
+    });
+    httpApi.addRoutes({
+      path: "/push-token",
+      methods: [apigwv2.HttpMethod.DELETE],
+      integration: deletePushTokenIntegration,
     });
   }
 }
