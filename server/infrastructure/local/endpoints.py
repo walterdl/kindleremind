@@ -23,6 +23,11 @@ endpoints = {
             'response_type': 'lambda_proxy',
             'handler_module': 'kindleremind.api.post_push_token.handler',
             'handler_func': "lambda_handler",
+        },
+        'delete': {
+            'response_type': 'lambda_proxy',
+            'handler_module': 'kindleremind.api.delete_push_token.handler',
+            'handler_func': "lambda_handler",
         }
     }
 }
