@@ -1,4 +1,11 @@
 endpoints = {
+    '/authorizer': {
+        'post': {
+            'response_type': 'raw',
+            'handler_module': 'kindleremind.api.authorizer.handler',
+            'handler_func': "lambda_handler",
+        }
+    },
     '/clippings': {
         'post': {
             'response_type': 'lambda_proxy',
@@ -11,10 +18,10 @@ endpoints = {
             'handler_func': "lambda_handler",
         }
     },
-    '/authorizer': {
+    '/push-token': {
         'post': {
-            'response_type': 'raw',
-            'handler_module': 'kindleremind.api.authorizer.handler',
+            'response_type': 'lambda_proxy',
+            'handler_module': 'kindleremind.api.post_push_token.handler',
             'handler_func': "lambda_handler",
         }
     }

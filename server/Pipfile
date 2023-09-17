@@ -10,6 +10,7 @@ deploy = "bash -c 'cd infrastructure/cdk && cdk deploy'"
 synth-deploy = "bash -c 'pipenv run synth && pipenv run deploy'"
 local = "bash -c 'cd infrastructure/local && flask --app api run --extra-files ../../src/**/*.py --debug --port 5001'"
 tw = "bash -c 'ptw'"
+setupmongo = "bash -c 'cd infrastructure && python mongodb.py'"
 
 [packages]
 pymongo = "*"
