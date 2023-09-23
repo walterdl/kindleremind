@@ -11,6 +11,7 @@ import {
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 
 import { SSM_PARAM_NAMES, SsmParams } from "./ssm-params";
+import { KrCognitoUserPool } from "./cognito-user-pool";
 
 export class Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -167,5 +168,7 @@ export class Stack extends cdk.Stack {
       methods: [apigwv2.HttpMethod.DELETE],
       integration: deletePushTokenIntegration,
     });
+
+    new KrCognitoUserPool(this, "KrCognitoUserPool");
   }
 }
