@@ -4,10 +4,6 @@ import { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as python from "@aws-cdk/aws-lambda-python-alpha";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
-import {
-  HttpLambdaAuthorizer,
-  HttpLambdaResponseType,
-} from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 
 import { SSM_PARAM_NAMES, SsmParams } from "./ssm-params";
@@ -77,15 +73,6 @@ export class Stack extends cdk.Stack {
         },
       }
     );
-    const authorizer = new HttpLambdaAuthorizer(
-      "Authorizer",
-      authorizerFunction,
-      {
-        identitySource: ["$request.header.Authorization"],
-        responseTypes: [HttpLambdaResponseType.SIMPLE],
-        resultsCacheTtl: cdk.Duration.minutes(40),
-      }
-    );
 
     const postPushTokenFunction = new python.PythonFunction(
       this,
@@ -138,7 +125,7 @@ export class Stack extends cdk.Stack {
       apiName: "KindleRemindApi",
       createDefaultStage: false,
       disableExecuteApiEndpoint: false,
-      defaultAuthorizer: authorizer,
+      defaultAuthorizer: cognitoUserPool.authorizer,
     });
     new apigwv2.HttpStage(this, "Stage", {
       httpApi,
@@ -159,7 +146,7 @@ export class Stack extends cdk.Stack {
       path: "/status",
       methods: [apigwv2.HttpMethod.GET],
       integration: statusIntegration,
-      authorizer: cognitoUserPool.authorizer,
+      authorizer: new apigwv2.HttpNoneAuthorizer(),
     });
     httpApi.addRoutes({
       path: "/push-token",
