@@ -44,6 +44,7 @@ export class KrCognitoUserPool extends Construct {
       preventUserExistenceErrors: true,
       authFlows: {
         userSrp: true,
+        userPassword: true,
       },
       enableTokenRevocation: true,
       userPoolClientName: "KindleRemindMobileApp",
