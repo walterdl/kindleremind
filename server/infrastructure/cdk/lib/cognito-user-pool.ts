@@ -11,10 +11,7 @@ export class KrCognitoUserPool extends Construct {
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
       selfSignUpEnabled: true,
       signInAliases: {
-        username: true,
         email: true,
-        phone: false,
-        preferredUsername: false,
       },
       signInCaseSensitive: false,
       standardAttributes: {
@@ -34,6 +31,7 @@ export class KrCognitoUserPool extends Construct {
           "Hello {username}, Thanks for signing up to KindleRemind! Your verification code is {####}.",
         emailStyle: cognito.VerificationEmailStyle.CODE,
       },
+      deletionProtection: true,
     });
 
     userPool.addClient("KindleRemindMobileApp", {

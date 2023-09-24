@@ -1,31 +1,45 @@
 import React from 'react';
+import {makeStyles, Button} from '@rneui/themed';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useAuthenticator} from '@aws-amplify/ui-react-native';
 
 import {useNavigationTheme} from '../../theme';
-import {Authenticator, CheckAuthentication} from '../Authenticator';
-import {PrivateRoot} from './PrivateRoot';
 import {RootScreenNames, RootStackParamList} from './types';
+import {Home} from '../Home';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const useStyles = makeStyles(theme => ({
+  sceneContent: {
+    padding: theme.spacing.md,
+  },
+}));
 
 export function AppNavigation(): JSX.Element {
   const navigationTheme = useNavigationTheme();
+  const styles = useStyles();
 
   return (
     <NavigationContainer theme={navigationTheme}>
-      <Stack.Navigator initialRouteName={RootScreenNames.CheckLogin}>
-        <Stack.Screen
-          name={RootScreenNames.CheckLogin}
-          component={CheckAuthentication}
-        />
-        <Stack.Screen name={RootScreenNames.Login} component={Authenticator} />
-        <Stack.Screen
-          name={RootScreenNames.PrivateRoot}
-          component={PrivateRoot}
-          options={{headerShown: false}}
-        />
+      <Stack.Navigator
+        initialRouteName={RootScreenNames.Clippings}
+        screenOptions={{
+          contentStyle: styles.sceneContent,
+          headerBackVisible: false,
+          headerRight: HeaderRight,
+        }}>
+        <Stack.Screen name={RootScreenNames.Clippings} component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+}
+
+function HeaderRight() {
+  const {signOut} = useAuthenticator();
+
+  return (
+    <Button type="clear" onPress={signOut}>
+      Sign out
+    </Button>
   );
 }
