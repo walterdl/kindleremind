@@ -132,6 +132,8 @@ export class Stack extends cdk.Stack {
       deletePushTokenFunction,
     ]);
 
+    const cognitoUserPool = new KrCognitoUserPool(this, "KrCognitoUserPool");
+
     const httpApi = new apigwv2.HttpApi(this, "HttpApi", {
       apiName: "KindleRemindApi",
       createDefaultStage: false,
@@ -157,6 +159,7 @@ export class Stack extends cdk.Stack {
       path: "/status",
       methods: [apigwv2.HttpMethod.GET],
       integration: statusIntegration,
+      authorizer: cognitoUserPool.authorizer,
     });
     httpApi.addRoutes({
       path: "/push-token",
@@ -168,7 +171,5 @@ export class Stack extends cdk.Stack {
       methods: [apigwv2.HttpMethod.DELETE],
       integration: deletePushTokenIntegration,
     });
-
-    new KrCognitoUserPool(this, "KrCognitoUserPool");
   }
 }

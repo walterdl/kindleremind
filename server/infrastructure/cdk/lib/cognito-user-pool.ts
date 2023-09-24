@@ -1,8 +1,13 @@
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
 import * as cognito from "aws-cdk-lib/aws-cognito";
+import { HttpUserPoolAuthorizer } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 
 export class KrCognitoUserPool extends Construct {
+  readonly userPool: cognito.UserPool;
+  readonly mobileAppClient: cognito.UserPoolClient;
+  readonly authorizer: HttpUserPoolAuthorizer;
+
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -34,7 +39,7 @@ export class KrCognitoUserPool extends Construct {
       deletionProtection: true,
     });
 
-    userPool.addClient("KindleRemindMobileApp", {
+    this.mobileAppClient = userPool.addClient("MobileAppClient", {
       accessTokenValidity: cdk.Duration.hours(1),
       preventUserExistenceErrors: true,
       authFlows: {
@@ -43,5 +48,14 @@ export class KrCognitoUserPool extends Construct {
       enableTokenRevocation: true,
       userPoolClientName: "KindleRemindMobileApp",
     });
+
+    this.authorizer = new HttpUserPoolAuthorizer(
+      "UserPoolAuthorizer",
+      userPool,
+      {
+        userPoolClients: [this.mobileAppClient],
+        identitySource: ["$request.header.Authorization"],
+      }
+    );
   }
 }
