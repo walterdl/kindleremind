@@ -1,5 +1,6 @@
 *.env
 infrastructure/playground*.mongodb.js
+infrastructure/local/event.json
 .vscode/tasks.json
 test.py
 **/__pycache__

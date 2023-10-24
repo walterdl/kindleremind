@@ -5,8 +5,15 @@ from kindleremind.api.post_push_token.storage import Storage
 
 
 @pytest.fixture()
-def instance():
-    return Storage(Mock())
+def app_context():
+    return {
+        'email': 'The user email'
+    }
+
+
+@pytest.fixture()
+def instance(app_context):
+    return Storage(app_context, Mock())
 
 
 @pytest.fixture()
@@ -21,15 +28,17 @@ def test_replace_exiting_record(instance, push_token):
     assert upsert == True
 
 
-def test_filter_by_push_token(instance, push_token):
+def test_filter_by_push_token_and_user_email(instance, push_token, app_context):
     instance.save_token(push_token)
     used_filter = instance.collection.find_one_and_replace.call_args.args[0]
 
-    assert used_filter == {'token': push_token}
+    assert used_filter == {'token': push_token,
+                           'user': app_context['email']}
 
 
-def test_create_new_record_with_same_token(instance, push_token):
+def test_create_new_record_with_same_token(instance, push_token, app_context):
     instance.save_token(push_token)
     new_record = instance.collection.find_one_and_replace.call_args.args[1]
 
-    assert new_record == {'token': push_token}
+    assert new_record == {'token': push_token,
+                          'user': app_context['email']}

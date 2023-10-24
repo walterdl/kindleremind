@@ -33,7 +33,7 @@ for path in endpoints:
 
 
 def build_event():
-    return {
+    result = {
         'version': '2.0',
         'routeKey': f"{request.method} {request.path}",
         'rawPath': request.path,
@@ -50,6 +50,13 @@ def build_event():
         'body': request.data.decode('utf-8'),
         'isBase64Encoded': False
     }
+
+    with open('./event.json') as context_file:
+        context = json.load(context_file)
+        # Merge context and base
+        result.update(context)
+
+    return result
 
 
 def format_lambda_response(response, endpoint_config):

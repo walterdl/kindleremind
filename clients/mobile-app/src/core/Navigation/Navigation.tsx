@@ -7,6 +7,7 @@ import {useAuthenticator} from '@aws-amplify/ui-react-native';
 import {useNavigationTheme} from '../../theme';
 import {RootScreenNames, RootStackParamList} from './types';
 import {Home} from '../Home';
+import {useSavePushToken} from './useSavePushToken';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const useStyles = makeStyles(theme => ({
@@ -18,6 +19,8 @@ const useStyles = makeStyles(theme => ({
 export function AppNavigation(): JSX.Element {
   const navigationTheme = useNavigationTheme();
   const styles = useStyles();
+
+  useSavePushToken();
 
   return (
     <NavigationContainer theme={navigationTheme}>
