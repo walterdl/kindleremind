@@ -5,5 +5,5 @@ from kindleremind.lib.mongodb.connection import clippings
 from kindleremind.api.post_clippings.key_generator import ClippingKeyGenerator
 
 
-def get_service():
-    return WriteClippingsService(ClippingKeyGenerator(mmh3.hash), Storage(clippings))
+def get_service(context):
+    return WriteClippingsService(ClippingKeyGenerator(mmh3.hash), Storage(context, clippings))

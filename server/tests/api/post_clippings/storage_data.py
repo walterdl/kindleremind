@@ -3,6 +3,7 @@ from pymongo.results import BulkWriteResult
 from pytest import fixture
 from unittest.mock import Mock, patch
 from tests.api.common_fixtures import clippings
+from kindleremind.api.post_clippings.storage import Storage
 
 
 class DummyReplaceOne():
@@ -45,3 +46,15 @@ def clippings_collections():
     mock_collection.operations = []
 
     return mock_collection
+
+
+@fixture()
+def app_context():
+    return {
+        'email': 'The user email'
+    }
+
+
+@fixture()
+def instance(app_context, clippings_collections):
+    return Storage(app_context, clippings_collections)

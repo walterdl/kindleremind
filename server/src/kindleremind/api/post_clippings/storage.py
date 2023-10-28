@@ -2,7 +2,8 @@ from pymongo import ReplaceOne
 
 
 class Storage:
-    def __init__(self, clippings_collection):
+    def __init__(self, app_context, clippings_collection):
+        self.app_context = app_context
         self.collection = clippings_collection
 
     def save(self, clippings):
@@ -16,7 +17,10 @@ class Storage:
         }
 
     def replace_clipping(self, clipping):
-        return ReplaceOne(self._clipping_filter(clipping), clipping, upsert=True)
+        new_clipping = clipping.copy()
+        new_clipping['user'] = self.app_context['email']
+
+        return ReplaceOne(self._clipping_filter(clipping), new_clipping, upsert=True)
 
     def _clipping_filter(self, clipping):
         return {'key': clipping['key']}
