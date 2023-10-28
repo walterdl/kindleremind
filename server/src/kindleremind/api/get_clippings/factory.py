@@ -3,5 +3,5 @@ from .storage import Storage
 from .service import GetClippingsService
 
 
-def get_service():
-    return GetClippingsService(Storage(clippings))
+def get_service(context):
+    return GetClippingsService(Storage(context, clippings))

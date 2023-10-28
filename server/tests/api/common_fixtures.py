@@ -33,3 +33,10 @@ def clippings():
             {**base2, 'key': '2'},
         ]
     })
+
+
+@pytest.fixture()
+def app_context():
+    return {
+        'email': 'user@email.com'
+    }

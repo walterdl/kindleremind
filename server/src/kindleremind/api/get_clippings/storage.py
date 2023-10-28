@@ -2,12 +2,16 @@ import pymongo
 
 
 class Storage():
-    def __init__(self, clippings_collection):
+    def __init__(self, context, clippings_collection):
+        self.context = context
         self.collection = clippings_collection
 
     def query_clippings(self, options={}):
         cursor = self.collection.find(
-            {}, projection={'_id': False}, sort=self.format_sorting(options))
+            {'user': self.context['email']},
+            projection={'_id': False},
+            sort=self.format_sorting(options)
+        )
 
         return list(cursor)
 
