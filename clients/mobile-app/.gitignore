@@ -60,5 +60,6 @@ buck-out/
 /ios/Pods/
 /vendor/bundle/
 android/app/agconnect-services.json
+android/app/google-services.json
 .env
 android/app/*.jks
