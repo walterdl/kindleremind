@@ -1,16 +1,24 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, ActivityIndicator, ScrollView} from 'react-native';
 import {Text, Button} from '@rneui/themed';
 
 import {useStyles} from './styles';
 import {useGetApiKeys} from './useGetApiKeys';
-import {ApiKey} from './types';
 import {ApiKeyCard} from './ApiKeyCard';
+import {ApiKeysStateProvider, useApiKeysState} from './apiKeysState';
 
-export function ApiKeys() {
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
-  let {loading, error, getApiKeys} = useGetApiKeys(setApiKeys);
+export function ApiKeysView() {
+  return (
+    <ApiKeysStateProvider>
+      <ApiKeysContent />
+    </ApiKeysStateProvider>
+  );
+}
+
+function ApiKeysContent() {
   const styles = useStyles();
+  const [apiKeys] = useApiKeysState();
+  let {loading, error, getApiKeys} = useGetApiKeys();
 
   return (
     <View>

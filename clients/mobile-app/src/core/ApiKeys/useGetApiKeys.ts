@@ -1,9 +1,12 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useFetch, Fetch} from '../../utils/useFetch';
-import {ApiKey, ApiKeysResponse} from './types';
 
-export function useGetApiKeys(receiveApiKeys: (apiKeys: ApiKey[]) => void) {
+import {useFetch, Fetch} from '../../utils/useFetch';
+import {ApiKeysResponse} from './types';
+import {useApiKeysState} from './apiKeysState';
+
+export function useGetApiKeys() {
   const fetch = useFetch();
+  const [, setApiKeys] = useApiKeysState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -13,13 +16,13 @@ export function useGetApiKeys(receiveApiKeys: (apiKeys: ApiKey[]) => void) {
 
     try {
       const result = await fetchApiKeys(fetch);
-      receiveApiKeys(result);
+      setApiKeys(result);
     } catch {
       setError(true);
     } finally {
       setLoading(false);
     }
-  }, [fetch, receiveApiKeys]);
+  }, [fetch, setApiKeys]);
 
   const executed = useRef(false);
   useEffect(() => {

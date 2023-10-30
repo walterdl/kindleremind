@@ -1,24 +1,40 @@
-import React, {useCallback, useState} from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, ActivityIndicator} from 'react-native';
 import {Text, Button, Card, Icon} from '@rneui/themed';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 import {apiKeyCardStyles} from './styles';
 import {ApiKey} from './types';
+import {useDeleteApiKey} from './useDeleteApiKey';
 
-export function ApiKeyCard(props: {apiKey: ApiKey}) {
-  const {apiKey} = props;
+export function ApiKeyCard(props: Props) {
   const styles = apiKeyCardStyles();
   const [revealed, setRevealed] = useState(false);
+  const {deleteApiKey, loading, error} = useDeleteApiKey();
 
   // hidePlaceholder var equal to the first 7 chars + 10 asterisks
-  const hidePlaceholder = apiKey.value.slice(0, 10) + '**********';
+  const hidePlaceholder = props.apiKey.value.slice(0, 10) + '**********';
   const keyEllipsisMoe = revealed ? undefined : 'tail';
   const keyNumberOfLines = revealed ? undefined : 1;
 
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Error',
+        textBody: "Couldn't delete API Key. Please, try again.",
+        autoClose: true,
+        onPress: () => {
+          Toast.hide();
+        },
+      });
+    }
+  }, [error]);
+
   return (
     <Card>
-      <Card.Title>{apiKey.name}</Card.Title>
+      <Card.Title>{props.apiKey.name}</Card.Title>
       <Card.Divider />
       <View>
         <View style={styles.valueLabelContainer}>
@@ -28,11 +44,11 @@ export function ApiKeyCard(props: {apiKey: ApiKey}) {
             numberOfLines={keyNumberOfLines}
             selectable>
             <Text style={styles.valueLabel}>Value:</Text>{' '}
-            <Text>{revealed ? apiKey.value : hidePlaceholder}</Text>
+            <Text>{revealed ? props.apiKey.value : hidePlaceholder}</Text>
           </Text>
         </View>
         <Text style={styles.textLine}>
-          Crated {new Date(apiKey.createdAt).toString()}
+          Crated {new Date(props.apiKey.createdAt).toString()}
         </Text>
         <View style={styles.optionsContainer}>
           <Button
@@ -45,15 +61,21 @@ export function ApiKeyCard(props: {apiKey: ApiKey}) {
               color={styles.normalIcon.color}
             />
           </Button>
-          <CopyToClipboardButton apiKeyValue={apiKey.value} />
+          <CopyToClipboardButton apiKeyValue={props.apiKey.value} />
           <Button
             color="error"
             type="outline"
             containerStyle={styles.optionContainer}
             buttonStyle={styles.deleteButtonStyle}
-            titleStyle={styles.deleteButtonLabelStyle}>
-            Delete
-            <Icon name="delete" color={styles.deleteButtonLabelStyle.color} />
+            titleStyle={styles.deleteButtonLabelStyle}
+            disabled={loading}
+            onPress={() => deleteApiKey(props.apiKey)}>
+            Delete{' '}
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <Icon name="delete" color={styles.deleteButtonLabelStyle.color} />
+            )}
           </Button>
         </View>
       </View>
@@ -89,4 +111,8 @@ function CopyToClipboardButton(props: {apiKeyValue: string}) {
       )}
     </Button>
   );
+}
+
+interface Props {
+  apiKey: ApiKey;
 }

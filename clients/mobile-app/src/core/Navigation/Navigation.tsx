@@ -7,7 +7,7 @@ import {useAuthenticator} from '@aws-amplify/ui-react-native';
 import {useNavigationTheme} from '../../theme';
 import {RootScreenNames, RootStackParamList} from './types';
 import {Home} from '../Home';
-import {ApiKeys} from '../ApiKeys';
+import {ApiKeysView} from '../ApiKeys';
 import {useSavePushToken} from './useSavePushToken';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -38,7 +38,7 @@ export function AppNavigation(): JSX.Element {
         />
         <Stack.Screen
           name={RootScreenNames.ApiKeys}
-          component={ApiKeys}
+          component={ApiKeysView}
           options={{title: 'API Keys'}}
         />
       </Stack.Navigator>

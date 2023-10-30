@@ -59,5 +59,7 @@ function addAuthorization(options: RequestInit, token: string) {
     options.headers = {};
   }
 
-  (options.headers as {[key: string]: string}).Authorization = token;
+  const headers = options.headers as {[key: string]: string};
+  headers.Authorization = token;
+  headers['Content-Type'] = 'application/json';
 }
