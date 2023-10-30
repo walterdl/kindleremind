@@ -1,24 +1,46 @@
 import {useCallback} from 'react';
 import {Auth} from 'aws-amplify';
 import {useAuthenticator} from '@aws-amplify/ui-react-native';
+import Config from 'react-native-config';
 
-export function useFetch() {
+const defaultOptions: UseFetchOptions = {
+  withApiBaseUrl: true,
+};
+
+export function useFetch(options: UseFetchOptions = defaultOptions) {
   const {signOut} = useAuthenticator();
 
   return useCallback(
-    async (url: string, options: RequestInit = {}) => {
+    async (url: string, requestInit: RequestInit = {}) => {
       const token = await getSessionToken();
       if (!token) {
         signOut();
         throw new Error('No session token');
       }
 
-      addAuthorization(options, token);
-      return fetch(url, options);
+      addAuthorization(requestInit, token);
+
+      if (options.withApiBaseUrl) {
+        url = Config.API_URL + url;
+      }
+
+      return fetch(url, requestInit);
     },
-    [signOut],
+    [options.withApiBaseUrl, signOut],
   );
 }
+
+export interface UseFetchOptions {
+  /**
+   * @default true
+   */
+  withApiBaseUrl?: boolean;
+}
+
+export type Fetch = (
+  url: string,
+  requestInit?: RequestInit,
+) => Promise<Response>;
 
 async function getSessionToken(): Promise<string | null> {
   try {

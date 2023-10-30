@@ -7,6 +7,7 @@ import {useAuthenticator} from '@aws-amplify/ui-react-native';
 import {useNavigationTheme} from '../../theme';
 import {RootScreenNames, RootStackParamList} from './types';
 import {Home} from '../Home';
+import {ApiKeys} from '../ApiKeys';
 import {useSavePushToken} from './useSavePushToken';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -28,10 +29,18 @@ export function AppNavigation(): JSX.Element {
         initialRouteName={RootScreenNames.Clippings}
         screenOptions={{
           contentStyle: styles.sceneContent,
-          headerBackVisible: false,
           headerRight: HeaderRight,
         }}>
-        <Stack.Screen name={RootScreenNames.Clippings} component={Home} />
+        <Stack.Screen
+          name={RootScreenNames.Clippings}
+          component={Home}
+          options={{title: 'Kindleremind'}}
+        />
+        <Stack.Screen
+          name={RootScreenNames.ApiKeys}
+          component={ApiKeys}
+          options={{title: 'API Keys'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
