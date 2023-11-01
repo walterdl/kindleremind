@@ -6,6 +6,7 @@ import {useStyles} from './styles';
 import {useGetApiKeys} from './useGetApiKeys';
 import {ApiKeyCard} from './ApiKeyCard';
 import {ApiKeysStateProvider, useApiKeysState} from './apiKeysState';
+import {CreateApiKey} from './CreateApiKey';
 
 export function ApiKeysView() {
   return (
@@ -21,7 +22,8 @@ function ApiKeysContent() {
   let {loading, error, getApiKeys} = useGetApiKeys();
 
   return (
-    <View>
+    <View style={styles.root}>
+      <CreateApiKey />
       <LoadingIndicator loading={loading} />
       <ErrorIndicator error={error} getApiKeys={getApiKeys} />
       <ScrollView>

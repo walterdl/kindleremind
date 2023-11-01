@@ -1,6 +1,9 @@
 import {makeStyles} from '@rneui/themed';
 
 export const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative',
+  },
   loadingIndicator: {
     height: '100%',
     justifyContent: 'center',
@@ -54,5 +57,37 @@ export const apiKeyCardStyles = makeStyles(theme => ({
   },
   textLine: {
     marginBottom: theme.spacing.sm,
+  },
+}));
+
+export const createApiKeyStyles = makeStyles(theme => ({
+  addButtonContainer: {
+    position: 'absolute',
+    right: theme.spacing.xl,
+    bottom: theme.spacing.xl + theme.spacing.xl,
+    width: 'auto',
+    height: 'auto',
+    display: 'flex',
+  },
+  addButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+  overlayContainer: {
+    width: 250,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+  error: {
+    color: theme.colors.error,
+    maxWidth: 200,
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginTop: theme.spacing.md,
   },
 }));
