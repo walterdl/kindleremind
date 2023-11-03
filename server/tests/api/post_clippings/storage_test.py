@@ -38,11 +38,12 @@ def test_replaces_clippings_by_key(instance, clippings_collections, clippings):
 
 
 @mock_replace_one
-def test_sets_given_clipping_values(instance, clippings_collections, clippings):
+def test_sets_given_clipping_values(instance, clippings_collections, clippings, app_context):
     instance.save(clippings['formatted'])
 
     for i, operation in enumerate(clippings_collections.executed_operations()):
-        assert operation.replacement == clippings['formatted'][i]
+        assert operation.replacement == {
+            **clippings['formatted'][i], 'user': app_context['email']}
 
 
 @mock_replace_one
