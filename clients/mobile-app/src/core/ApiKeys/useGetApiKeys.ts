@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 
 import {useFetch, Fetch} from '../../utils/useFetch';
-import {ApiKeysResponse} from './types';
+import type {ApiKey} from './types';
 import {useApiKeysState} from './apiKeysState';
 
 export function useGetApiKeys() {
@@ -44,7 +44,7 @@ async function fetchApiKeys(fetch: Fetch) {
     throw new Error();
   }
 
-  const data: ApiKeysResponse = await response.json();
+  const data: ApiKey[] = await response.json();
 
-  return data.apiKeys || [];
+  return data || [];
 }
