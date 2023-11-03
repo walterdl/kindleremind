@@ -29,5 +29,12 @@ endpoints = {
             'handler_module': 'kindleremind.api.delete_push_token.handler',
             'handler_func': "lambda_handler",
         }
+    },
+    '/api-keys': {
+        'get': {
+            'response_type': 'lambda_proxy',
+            'handler_module': 'kindleremind.api.get_api_keys.handler',
+            'handler_func': "lambda_handler",
+        },
     }
 }
