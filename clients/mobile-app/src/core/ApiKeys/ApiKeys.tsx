@@ -1,8 +1,13 @@
 import React from 'react';
-import {View, ActivityIndicator, ScrollView} from 'react-native';
+import {View, ActivityIndicator, ScrollView, Image} from 'react-native';
 import {Text, Button} from '@rneui/themed';
 
-import {useStyles} from './styles';
+import {
+  useStyles,
+  useEmptyIndicatorStyles,
+  useLoadingStyles,
+  useErrorIndicatorStyles,
+} from './styles';
 import {useGetApiKeys} from './useGetApiKeys';
 import {ApiKeyCard} from './ApiKeyCard';
 import {ApiKeysStateProvider, useApiKeysState} from './apiKeysState';
@@ -20,54 +25,69 @@ function ApiKeysContent() {
   const styles = useStyles();
   const [apiKeys] = useApiKeysState();
   let {loading, error, getApiKeys} = useGetApiKeys();
+  const showApiKeyCreator = !loading && !error;
+  const showEmptyIndicator = apiKeys.length === 0 && showApiKeyCreator;
 
   return (
     <View style={styles.root}>
-      <CreateApiKey />
-      <LoadingIndicator loading={loading} />
-      <ErrorIndicator error={error} getApiKeys={getApiKeys} />
-      <ScrollView>
-        <View style={styles.cardsContainer}>
-          {!!apiKeys.length &&
-            apiKeys.map((apiKey, i) => <ApiKeyCard key={i} apiKey={apiKey} />)}
-        </View>
-      </ScrollView>
+      {loading && <LoadingIndicator />}
+      {error && <ErrorIndicator getApiKeys={getApiKeys} />}
+      {showEmptyIndicator && <EmptyIndicator />}
+      {apiKeys.length > 0 && (
+        <ScrollView>
+          <View style={styles.cardsContainer}>
+            {apiKeys.map((apiKey, i) => (
+              <ApiKeyCard key={i} apiKey={apiKey} />
+            ))}
+          </View>
+        </ScrollView>
+      )}
+      {showApiKeyCreator && <CreateApiKey />}
     </View>
   );
 }
 
-function LoadingIndicator(props: {loading: boolean}) {
-  const styles = useStyles();
+function EmptyIndicator() {
+  const styles = useEmptyIndicatorStyles();
 
-  if (props.loading) {
-    return (
-      <View style={styles.loadingIndicator}>
-        <View style={styles.rowContainer}>
-          <Text>Loading keys ...</Text>
-          <ActivityIndicator size="large" style={styles.activityIndicator} />
-        </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles.image}
+          source={require('./empty.png')}
+          resizeMode="contain"
+        />
       </View>
-    );
-  }
-
-  return null;
+      <Text style={styles.text}>You have no API Keys</Text>
+    </View>
+  );
 }
 
-function ErrorIndicator(props: {error: boolean; getApiKeys: () => void}) {
-  const styles = useStyles();
+function LoadingIndicator() {
+  const styles = useLoadingStyles();
 
-  if (props.error) {
-    return (
-      <View style={styles.errorContainer}>
-        <View style={styles.errorTextContainer}>
-          <Text>Something went wrong. Please, try again.</Text>
-        </View>
-        <View style={styles.reloadContainer}>
-          <Button title="Reload" onPress={props.getApiKeys} />
-        </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.rowContainer}>
+        <Text>Loading keys ...</Text>
+        <ActivityIndicator size="large" style={styles.activityIndicator} />
       </View>
-    );
-  }
+    </View>
+  );
+}
 
-  return null;
+function ErrorIndicator(props: {getApiKeys: () => void}) {
+  const styles = useErrorIndicatorStyles();
+
+  return (
+    <View style={styles.errorContainer}>
+      <View style={styles.errorTextContainer}>
+        <Text>Something went wrong. Please, try again.</Text>
+      </View>
+      <View style={styles.reloadContainer}>
+        <Button title="Reload" onPress={props.getApiKeys} />
+      </View>
+    </View>
+  );
 }

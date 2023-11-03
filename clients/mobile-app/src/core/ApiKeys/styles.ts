@@ -1,10 +1,17 @@
 import {makeStyles} from '@rneui/themed';
 
-export const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(() => ({
   root: {
     position: 'relative',
+    flex: 1,
   },
-  loadingIndicator: {
+  cardsContainer: {
+    flex: 1,
+  },
+}));
+
+export const useLoadingStyles = makeStyles(theme => ({
+  container: {
     height: '100%',
     justifyContent: 'center',
   },
@@ -16,6 +23,9 @@ export const useStyles = makeStyles(theme => ({
   activityIndicator: {
     marginLeft: theme.spacing.sm,
   },
+}));
+
+export const useErrorIndicatorStyles = makeStyles(theme => ({
   errorTextContainer: {
     marginBottom: theme.spacing.md,
   },
@@ -25,12 +35,30 @@ export const useStyles = makeStyles(theme => ({
     height: '100%',
   },
   reloadContainer: {flexDirection: 'row'},
-  cardsContainer: {
+}));
+
+export const useEmptyIndicatorStyles = makeStyles(() => ({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: 1,
+    marginTop: -60,
+  },
+  imageContainer: {
+    width: 200,
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
+  },
+  text: {
+    textAlign: 'center',
   },
 }));
 
-export const apiKeyCardStyles = makeStyles(theme => ({
+export const useApiKeyCardStyles = makeStyles(theme => ({
   valueLabelContainer: {
     flexDirection: 'row',
     position: 'relative',
@@ -60,7 +88,7 @@ export const apiKeyCardStyles = makeStyles(theme => ({
   },
 }));
 
-export const createApiKeyStyles = makeStyles(theme => ({
+export const useCreateApiKeyStyles = makeStyles(theme => ({
   addButtonContainer: {
     position: 'absolute',
     right: theme.spacing.xl,

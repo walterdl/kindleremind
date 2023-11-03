@@ -4,12 +4,12 @@ import {Text, Button, Card, Icon} from '@rneui/themed';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
-import {apiKeyCardStyles} from './styles';
+import {useApiKeyCardStyles} from './styles';
 import {ApiKey} from './types';
 import {useDeleteApiKey} from './useDeleteApiKey';
 
 export function ApiKeyCard(props: Props) {
-  const styles = apiKeyCardStyles();
+  const styles = useApiKeyCardStyles();
   const [revealed, setRevealed] = useState(false);
   const {deleteApiKey, loading, error} = useDeleteApiKey();
 
@@ -84,7 +84,7 @@ export function ApiKeyCard(props: Props) {
 }
 
 function CopyToClipboardButton(props: {apiKeyValue: string}) {
-  const styles = apiKeyCardStyles();
+  const styles = useApiKeyCardStyles();
 
   const [copied, setCopied] = useState(false);
 

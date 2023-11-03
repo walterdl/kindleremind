@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Overlay, Button, Icon, Text, Input} from '@rneui/themed';
 
-import {createApiKeyStyles} from './styles';
+import {useCreateApiKeyStyles} from './styles';
 import {useCreateApiKey} from './useCreateApiKey';
 
 export function CreateApiKey() {
-  const styles = createApiKeyStyles();
+  const styles = useCreateApiKeyStyles();
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState('');
   const {createApiKey, loading, error, cleanError} = useCreateApiKey();
