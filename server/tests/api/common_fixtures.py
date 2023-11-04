@@ -1,5 +1,6 @@
 import copy
 import pytest
+from bson.objectid import ObjectId
 
 
 @pytest.fixture()
@@ -43,6 +44,12 @@ def app_context():
 
 
 @pytest.fixture()
-def api_key_id():
+def doc_id():
     """A valid ObjectId (BSON) string."""
     return '6545cb6f1abf8bf1274d6e2f'
+
+
+@pytest.fixture()
+def doc_bid(doc_id):
+    """ObjectId (BSON) representation of the doc_id fixture."""
+    return ObjectId(doc_id)

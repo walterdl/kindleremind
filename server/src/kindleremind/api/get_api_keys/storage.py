@@ -9,8 +9,13 @@ class Storage:
     def get_api_keys(self):
         cursor = self.api_keys_collection.find(
             {'user': self.context['email']},
-            projection={'_id': False},
             sort=[('createdAt', pymongo.DESCENDING)]
         )
 
-        return list(cursor)
+        return [self._format_doc(x) for x in cursor]
+
+    def _format_doc(self, doc):
+        result = {**doc, 'id': str(doc['_id'])}
+        del result['_id']
+
+        return result

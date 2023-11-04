@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from bson.objectid import ObjectId
 
 from kindleremind.api.delete_api_key.storage import ApiKeyStorage
-from tests.api.common_fixtures import app_context, api_key_id
+from tests.api.common_fixtures import app_context, doc_id
 
 
 @pytest.fixture()

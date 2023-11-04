@@ -4,18 +4,20 @@ from datetime import datetime
 import pymongo
 
 from kindleremind.api.get_api_keys.storage import Storage
-from tests.api.common_fixtures import app_context
+from tests.api.common_fixtures import app_context, doc_id, doc_bid
 
 
 @pytest.fixture()
-def api_keys():
+def api_keys(doc_bid):
     return [
         {
+            '_id': doc_bid,
             'name': 'Api Key 1',
             'value': 'value-1',
             'createdAt': datetime.fromisoformat('2023-11-04T09:00:00Z')
         },
         {
+            '_id': doc_bid,
             'name': 'Api Key 2',
             'value': 'value-2',
             'createdAt': datetime.fromisoformat('2023-11-07T10:00:00Z')
@@ -45,8 +47,14 @@ def test_get_api_keys_sorted_by_creation_date(instance):
     assert query_sorting == [('createdAt', pymongo.DESCENDING)]
 
 
-def test_does_not_include_native_id(instance):
-    instance.get_api_keys()
-    query_projection = instance.api_keys_collection.find.mock_calls[0].kwargs['projection']
+def test_returns_api_key_document_properly_formatted(instance, api_keys, doc_id):
+    result = instance.get_api_keys()
 
-    assert query_projection == {'_id': False}
+    for (i, api_key) in enumerate(result):
+        expected = {
+            **api_keys[i],
+            'id': doc_id,
+        }
+        del expected['_id']
+
+        assert api_key == expected
