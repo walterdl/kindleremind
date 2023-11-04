@@ -128,6 +128,24 @@ export class Stack extends cdk.Stack {
       getApiKeysFunction
     );
 
+    const postApiKeyFunction = new python.PythonFunction(
+      this,
+      "PostApiKeyFunction",
+      {
+        entry: path.resolve(__dirname, "../../../src"),
+        runtime: lambda.Runtime.PYTHON_3_11,
+        index: "kindleremind/api/post_api_key/handler.py",
+        handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+        },
+      }
+    );
+    const postApiKeyIntegration = new HttpLambdaIntegration(
+      "PostApiKeyIntegration",
+      postApiKeyFunction
+    );
+
     const ssmParams = new SsmParams(this, "SsmParams");
     ssmParams.grantRead([
       saveClippingsFunction,
@@ -136,6 +154,7 @@ export class Stack extends cdk.Stack {
       postPushTokenFunction,
       deletePushTokenFunction,
       getApiKeysFunction,
+      postApiKeyFunction,
     ]);
 
     const cognitoUserPool = new KrCognitoUserPool(this, "KrCognitoUserPool");
@@ -181,6 +200,11 @@ export class Stack extends cdk.Stack {
       path: "/api-keys",
       methods: [apigwv2.HttpMethod.GET],
       integration: getApiKeysIntegration,
+    });
+    httpApi.addRoutes({
+      path: "/api-keys",
+      methods: [apigwv2.HttpMethod.POST],
+      integration: postApiKeyIntegration,
     });
   }
 }

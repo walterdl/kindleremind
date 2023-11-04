@@ -36,5 +36,10 @@ endpoints = {
             'handler_module': 'kindleremind.api.get_api_keys.handler',
             'handler_func': "lambda_handler",
         },
+        'post': {
+            'response_type': 'lambda_proxy',
+            'handler_module': 'kindleremind.api.post_api_key.handler',
+            'handler_func': 'lambda_handler',
+        }
     }
 }
