@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from datetime import datetime
 
 from kindleremind.api.post_api_key.storage import ApiKeyStorage
-from tests.api.common_fixtures import app_context
+from tests.api.common_fixtures import app_context, doc_bid, doc_id
 
 
 @pytest.fixture(scope="module")
@@ -17,8 +17,14 @@ def token():
 
 
 @pytest.fixture()
-def instance(app_context, token, datetime_now):
-    result = ApiKeyStorage(app_context, Mock(), lambda: token)
+def instance(app_context, token, datetime_now, doc_bid):
+    def dummy_insert_one(doc):
+        doc['_id'] = doc_bid
+        return doc
+    collection = Mock()
+    collection.insert_one.side_effect = dummy_insert_one
+
+    result = ApiKeyStorage(app_context, collection, lambda: token)
     result._now = lambda: datetime_now
 
     return result
@@ -50,12 +56,13 @@ def test_saves_api_key_with_given_name(instance):
     assert instance.collection.insert_one.call_args.args[0]['name'] == input_name
 
 
-def test_returns_created_api_key_record(instance, token, app_context, datetime_now):
+def test_returns_created_api_key_record(instance, token, app_context, datetime_now, doc_id):
     input_name = 'API Key input name'
 
     result = instance.save_api_key(input_name)
 
     assert result == {
+        'id': doc_id,
         'name': input_name,
         'value': token,
         'user': app_context['email'],

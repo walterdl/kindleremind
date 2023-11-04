@@ -19,8 +19,13 @@ class ApiKeyStorage:
         }
 
         self.collection.insert_one(record)
+        self._format_created_id(record)
 
         return record
 
     def _now(self):
         return datetime.now()
+
+    def _format_created_id(self, record):
+        record['id'] = str(record['_id'])
+        del record['_id']

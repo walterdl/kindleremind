@@ -6,7 +6,6 @@ class PostApiKeyService:
         api_key = self.storage.save_api_key(api_key_name)
 
         return {
-            'name': api_key['name'],
-            'value': api_key['value'],
+            **api_key,
             'createdAt': api_key['createdAt'].isoformat()
         }
