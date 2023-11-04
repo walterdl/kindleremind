@@ -40,3 +40,9 @@ def app_context():
     return {
         'email': 'user@email.com'
     }
+
+
+@pytest.fixture()
+def api_key_id():
+    """A valid ObjectId (BSON) string."""
+    return '6545cb6f1abf8bf1274d6e2f'

@@ -62,7 +62,7 @@ def build_event():
 def format_lambda_response(response, endpoint_config):
     response_type = endpoint_config.get('response_type', 'lambda_proxy')
     if (response_type == 'lambda_proxy'):
-        return response['body'], response['statusCode'], response['headers']
+        return response.get('body', ''), response['statusCode'], response['headers']
 
     body = json.dumps(response) if response else "{}"
     return body, 200, {'Content-Type': 'application/json'}
