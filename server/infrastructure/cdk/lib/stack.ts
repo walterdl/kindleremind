@@ -60,20 +60,6 @@ export class Stack extends cdk.Stack {
       statusFunction
     );
 
-    const authorizerFunction = new python.PythonFunction(
-      this,
-      "AuthorizerFunction",
-      {
-        entry: path.resolve(__dirname, "../../../src"),
-        runtime: lambda.Runtime.PYTHON_3_11,
-        index: "kindleremind/api/authorizer/handler.py",
-        handler: "lambda_handler",
-        environment: {
-          ...SSM_PARAM_NAMES,
-        },
-      }
-    );
-
     const postPushTokenFunction = new python.PythonFunction(
       this,
       "PostPushTokenFunction",
@@ -168,7 +154,6 @@ export class Stack extends cdk.Stack {
     ssmParams.grantRead([
       saveClippingsFunction,
       getClippingsFunction,
-      authorizerFunction,
       postPushTokenFunction,
       deletePushTokenFunction,
       getApiKeysFunction,
