@@ -9,7 +9,9 @@ export function CreateApiKey() {
   const styles = useCreateApiKeyStyles();
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState('');
-  const {createApiKey, loading, error, cleanError} = useCreateApiKey();
+  const {createApiKey, loading, error, cleanError} = useCreateApiKey({
+    onSuccess: () => setVisible(false),
+  });
   const isValid = name.trim().length > 0;
   const disabled = loading || !isValid;
 

@@ -3,11 +3,12 @@ import {useFetch} from '../../utils/useFetch';
 import type {ApiKey} from './types';
 import {useApiKeysState} from './apiKeysState';
 
-export function useCreateApiKey() {
+export function useCreateApiKey(options: UseCreateApiKeyOptions = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const post = usePost();
   const addApiKeyToState = useAddApiKeyToState();
+  const {onSuccess} = options;
 
   const createApiKey = useCallback(
     async (name: string) => {
@@ -16,13 +17,14 @@ export function useCreateApiKey() {
         setError(false);
         const newApiKey = await post(name);
         addApiKeyToState(newApiKey);
+        onSuccess?.();
       } catch {
         setError(true);
       } finally {
         setLoading(false);
       }
     },
-    [addApiKeyToState, post],
+    [addApiKeyToState, onSuccess, post],
   );
 
   const cleanError = useCallback(() => {
@@ -61,4 +63,8 @@ function useAddApiKeyToState() {
     },
     [apiKeys, setApiKeys],
   );
+}
+
+export interface UseCreateApiKeyOptions {
+  onSuccess?: () => void;
 }
