@@ -17,7 +17,7 @@ export function useDeleteApiKey() {
       try {
         const response = await fetch('/api-keys', {
           method: 'delete',
-          body: JSON.stringify({apiKey: apiKey.value}),
+          queryParams: {id: apiKey.id},
         });
 
         if (!response.ok) {

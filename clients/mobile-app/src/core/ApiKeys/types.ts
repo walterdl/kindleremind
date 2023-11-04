@@ -1,4 +1,5 @@
 export interface ApiKey {
+  id: string;
   value: string;
   name: string;
   /**

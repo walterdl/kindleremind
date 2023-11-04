@@ -11,36 +11,24 @@ export function useFetch(options: UseFetchOptions = defaultOptions) {
   const {signOut} = useAuthenticator();
 
   return useCallback(
-    async (url: string, requestInit: RequestInit = {}) => {
+    async (url: string, fetchOptions: FetchOptions = {}) => {
       const token = await getSessionToken();
       if (!token) {
         signOut();
         throw new Error('No session token');
       }
 
-      addAuthorization(requestInit, token);
+      addAuthorization(fetchOptions, token);
 
       if (options.withApiBaseUrl) {
-        url = Config.API_URL + url;
+        url = Config.API_URL + url + queryParams(fetchOptions);
       }
 
-      return fetch(url, requestInit);
+      return fetch(url, fetchOptions);
     },
     [options.withApiBaseUrl, signOut],
   );
 }
-
-export interface UseFetchOptions {
-  /**
-   * @default true
-   */
-  withApiBaseUrl?: boolean;
-}
-
-export type Fetch = (
-  url: string,
-  requestInit?: RequestInit,
-) => Promise<Response>;
 
 async function getSessionToken(): Promise<string | null> {
   try {
@@ -52,6 +40,31 @@ async function getSessionToken(): Promise<string | null> {
   } catch {
     return null;
   }
+}
+
+function queryParams(fetchOptions: FetchOptions) {
+  if (fetchOptions.queryParams) {
+    const result = new URLSearchParams(fetchOptions.queryParams);
+    return '?' + result.toString();
+  }
+
+  return '';
+}
+
+export interface UseFetchOptions {
+  /**
+   * @default true
+   */
+  withApiBaseUrl?: boolean;
+}
+
+export type Fetch = (
+  url: string,
+  fetchOptions?: FetchOptions,
+) => Promise<Response>;
+
+export interface FetchOptions extends RequestInit {
+  queryParams?: Record<string, string>;
 }
 
 function addAuthorization(options: RequestInit, token: string) {
