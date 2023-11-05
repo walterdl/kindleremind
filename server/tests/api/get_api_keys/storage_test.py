@@ -58,3 +58,18 @@ def test_returns_api_key_document_properly_formatted(instance, api_keys, doc_id)
         del expected['_id']
 
         assert api_key == expected
+
+
+def test_applies_filter_if_given(instance):
+    api_key_value = 'The API Key value'
+    instance.get_api_keys({'value': api_key_value})
+    query_filter = instance.api_keys_collection.find.mock_calls[0].args[0]
+
+    assert query_filter['value'] == api_key_value
+
+
+def test_bypass_user_filter_if_specified(instance):
+    instance.get_api_keys(bypass_user_filter=True)
+    query_filter = instance.api_keys_collection.find.mock_calls[0].args[0]
+
+    assert 'user' not in query_filter

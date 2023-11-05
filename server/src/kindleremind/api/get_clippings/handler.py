@@ -1,10 +1,9 @@
 import json
-from kindleremind.lib.json import unmarshall
-from kindleremind.lib.auth_handler import auth_handler
+from kindleremind.lib.auth_handler.api_key_auth import api_key_auth
 from .factory import get_service
 
 
-@auth_handler
+@api_key_auth
 def lambda_handler(event=None, context=None):
     get_clippings_service = get_service(event['app_context'])
     clippings = get_clippings_service.get_clippings()

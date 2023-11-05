@@ -1,9 +1,9 @@
 import json
-from kindleremind.lib.auth_handler import auth_handler
+from kindleremind.lib.auth_handler.cognito_auth import cognito_auth
 from .factory import get_service
 
 
-@auth_handler
+@cognito_auth
 def lambda_handler(event=None, context=None):
     service = get_service(event['app_context'])
 

@@ -5,6 +5,10 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as python from "@aws-cdk/aws-lambda-python-alpha";
 import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+import {
+  HttpLambdaAuthorizer,
+  HttpLambdaResponseType,
+} from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 
 import { SSM_PARAM_NAMES, SsmParams } from "./ssm-params";
 import { KrCognitoUserPool } from "./cognito-user-pool";
@@ -12,6 +16,29 @@ import { KrCognitoUserPool } from "./cognito-user-pool";
 export class Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    const apiKeyAuthorizerFunction = new python.PythonFunction(
+      this,
+      "ApiKeyAuthorizerFunction",
+      {
+        entry: path.resolve(__dirname, "../../../src"),
+        runtime: lambda.Runtime.PYTHON_3_11,
+        index: "kindleremind/api/api_key_authorizer/handler.py",
+        handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+        },
+      }
+    );
+    const apiKeyLambdaAuthorizer = new HttpLambdaAuthorizer(
+      "ApiKeyLambdaAuthorizer",
+      apiKeyAuthorizerFunction,
+      {
+        authorizerName: "ApiKeyAuthorizer",
+        responseTypes: [HttpLambdaResponseType.SIMPLE],
+        identitySource: ["$request.header.Authorization"],
+      }
+    );
 
     const saveClippingsFunction = new python.PythonFunction(
       this,
@@ -152,6 +179,7 @@ export class Stack extends cdk.Stack {
 
     const ssmParams = new SsmParams(this, "SsmParams");
     ssmParams.grantRead([
+      apiKeyAuthorizerFunction,
       saveClippingsFunction,
       getClippingsFunction,
       postPushTokenFunction,
@@ -169,6 +197,7 @@ export class Stack extends cdk.Stack {
       disableExecuteApiEndpoint: false,
       defaultAuthorizer: cognitoUserPool.authorizer,
     });
+
     new apigwv2.HttpStage(this, "Stage", {
       httpApi,
       stageName: "v1",
@@ -178,6 +207,7 @@ export class Stack extends cdk.Stack {
       path: "/clippings",
       methods: [apigwv2.HttpMethod.POST],
       integration: saveClippingsIntegration,
+      authorizer: apiKeyLambdaAuthorizer,
     });
     httpApi.addRoutes({
       path: "/clippings",
