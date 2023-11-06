@@ -4,6 +4,7 @@ import {
   Authenticator,
   ThemeProvider as AuthThemeProvider,
 } from '@aws-amplify/ui-react-native';
+import {DefaultSignUpProps} from '@aws-amplify/ui-react-native/dist/Authenticator/Defaults/types';
 
 import {awsExports} from './awsExports';
 import {theme} from './theme';
@@ -19,15 +20,17 @@ export function AppAuthenticator({children}: Props) {
           loginMechanisms={['email']}
           signUpAttributes={['email', 'given_name']}
           components={{
-            SignUp: props => {
-              return <Authenticator.SignUp {...props} fields={signUpFields} />;
-            },
+            SignUp,
           }}>
           {children}
         </Authenticator>
       </Authenticator.Provider>
     </AuthThemeProvider>
   );
+}
+
+function SignUp(props: DefaultSignUpProps) {
+  return <Authenticator.SignUp {...props} fields={signUpFields} />;
 }
 
 interface Props {

@@ -16,7 +16,7 @@ function usePostPushToken() {
   const fetch = useFetch();
 
   return useCallback(
-    async (pushToken, proto) => {
+    async (pushToken: string, proto: string) => {
       await fetch(POST_TOKEN_URL, {
         method: 'POST',
         body: JSON.stringify({pushToken, proto}),
