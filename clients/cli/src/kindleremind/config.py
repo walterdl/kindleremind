@@ -8,10 +8,10 @@ var_sources = {
         'config_file': 'serverUrl',
         'cli_arg': 'server_url'
     },
-    'server_api_key': {
-        'env': 'SERVER_API_KEY',
-        'config_file': 'serverApiKey',
-        'cli_arg': 'server_api_key'
+    'api_key': {
+        'env': 'API_KEY',
+        'config_file': 'apiKey',
+        'cli_arg': 'api_key'
     },
 }
 
@@ -77,14 +77,9 @@ class _Config():
         return result
 
 
-# type: _Config
-config = None
-
-
 def init_config(cli_args={}):
-    global config
-
-    if config:
+    if config():
+        # Already initialized. Do nothing.
         return
 
     if environ.get('ENV') == 'TEST':
@@ -93,4 +88,11 @@ def init_config(cli_args={}):
         for var_name in var_sources:
             cli_args[var_sources[var_name]['cli_arg']] = 'test_' + var_name
 
-    config = _Config(cli_args)
+    config._instance = _Config(cli_args)
+
+
+def config():
+    return config._instance
+
+
+config._instance = None

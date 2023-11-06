@@ -7,10 +7,13 @@ from kindleremind.clippings.json import marshall
 
 @pytest.fixture()
 def config():
-    config_mock = Mock(server_url='http://example.com',
-                       server_api_key='Dummy api key')
-    with patch('kindleremind.post.config', config_mock):
-        yield config_mock
+    dummy_config = Mock(
+        server_url='http://example.com',
+        api_key='Dummy api key'
+    )
+
+    with patch('kindleremind.post.config', lambda: dummy_config):
+        yield dummy_config
 
 
 @pytest.fixture()
@@ -61,7 +64,7 @@ def test_sends_the_authorization_token(config, requests, clippings):
     send_clippings(clippings)
     headers = requests.mock_calls[0].kwargs['headers']
 
-    assert headers['Authorization'] == config.server_api_key
+    assert headers['Authorization'] == config.api_key
 
 
 def test_throws_if_status_code_is_not_2xx(requests, clippings):

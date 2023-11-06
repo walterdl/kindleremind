@@ -1,11 +1,11 @@
 import requests
-from .config import config
+from kindleremind.config import config
 from .clippings.json import marshall
 
 
 def send_clippings(clippings):
     response = requests.post(
-        config.server_url,
+        config().server_url,
         data=marshall(clippings),
         headers=_headers()
     )
@@ -16,7 +16,7 @@ def send_clippings(clippings):
 
 def _headers():
     return {
-        'Authorization': config.server_api_key,
+        'Authorization': config().api_key,
         'Content-Type': 'application/json'
     }
 

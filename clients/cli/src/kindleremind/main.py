@@ -3,6 +3,7 @@ import argparse
 import kindleremind.base_handler as base_handler
 import kindleremind.sync_handler as sync_handler
 
+
 parser = argparse.ArgumentParser(
     description="kindleremind CLI client allows management of highlights captured on kindle devices."
 )
@@ -41,7 +42,7 @@ syncCommand.add_argument(
     type=str
 )
 syncCommand.add_argument(
-    '--server-api-key',
+    '--api-key',
     required=False,
     type=str
 )
