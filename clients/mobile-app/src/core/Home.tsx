@@ -1,7 +1,9 @@
 import React, {useCallback} from 'react';
 import {View} from 'react-native';
 import {Text, Button, makeStyles} from '@rneui/themed';
+
 import {useNavigation, RootScreenNames} from './Navigation';
+import {PushNotifications} from './PushNotifications';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -23,9 +25,7 @@ export function Home() {
   return (
     <View>
       <Text style={styles.title}>Setup complete!</Text>
-      <Text>
-        You'll receive push notifications for your Kindle clippings reminders
-      </Text>
+      <PushNotifications />
       <View style={styles.space} />
       <Button title="API Keys" onPress={goToApiKeys} />
     </View>
