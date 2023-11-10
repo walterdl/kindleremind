@@ -4,6 +4,7 @@ import {Text, Button, makeStyles} from '@rneui/themed';
 
 import {useNavigation, RootScreenNames} from './Navigation';
 import {PushNotifications} from './PushNotifications';
+import {useUser} from './useUser';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -21,10 +22,11 @@ export function Home() {
   const goToApiKeys = useCallback(() => {
     navigation.navigate(RootScreenNames.ApiKeys);
   }, [navigation]);
+  const user = useUser();
 
   return (
     <View>
-      <Text style={styles.title}>Setup complete!</Text>
+      <Text style={styles.title}>Hi {user.firstName}! 👋🏽</Text>
       <PushNotifications />
       <View style={styles.space} />
       <Button title="API Keys" onPress={goToApiKeys} />

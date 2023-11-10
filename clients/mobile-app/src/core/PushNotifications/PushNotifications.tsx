@@ -17,7 +17,7 @@ export function PushNotifications() {
         {permissionStatus === 'checking' &&
           'Checking push notification permissions'}
         {permissionStatus === 'granted' &&
-          "You'll receive push notifications about your Kindle clippings"}
+          "Notifications enabled. You'll receive push notifications about your Kindle clippings"}
         {notGranted &&
           'Push notifications disabled. You will not receive reminders until you grant permission.'}
       </Text>

@@ -13,7 +13,7 @@ import {useSavePushToken} from './useSavePushToken';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const useStyles = makeStyles(theme => ({
   sceneContent: {
-    padding: theme.spacing.md,
+    padding: theme.spacing.xl,
   },
 }));
 
