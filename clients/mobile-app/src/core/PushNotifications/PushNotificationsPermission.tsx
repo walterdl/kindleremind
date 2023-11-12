@@ -4,7 +4,7 @@ import {Text, Button} from '@rneui/themed';
 
 import {usePermissionStatus, PermissionStatus} from './usePermissionStatus';
 
-export function PushNotifications() {
+export function PushNotificationsPermission() {
   const {permissionStatus, requestPermission} = usePermissionStatus();
 
   const notGranted = (

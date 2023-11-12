@@ -9,6 +9,7 @@ import {RootScreenNames, RootStackParamList} from './types';
 import {Home} from '../Home';
 import {ApiKeysView} from '../ApiKeys';
 import {useSavePushToken} from './useSavePushToken';
+import {PushNotificationsPresenter} from '../pushNotifications';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const useStyles = makeStyles(theme => ({
@@ -24,25 +25,28 @@ export function AppNavigation(): JSX.Element {
   useSavePushToken();
 
   return (
-    <NavigationContainer theme={navigationTheme}>
-      <Stack.Navigator
-        initialRouteName={RootScreenNames.Clippings}
-        screenOptions={{
-          contentStyle: styles.sceneContent,
-          headerRight: HeaderRight,
-        }}>
-        <Stack.Screen
-          name={RootScreenNames.Clippings}
-          component={Home}
-          options={{title: 'Kindleremind'}}
-        />
-        <Stack.Screen
-          name={RootScreenNames.ApiKeys}
-          component={ApiKeysView}
-          options={{title: 'API Keys'}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <PushNotificationsPresenter />
+      <NavigationContainer theme={navigationTheme}>
+        <Stack.Navigator
+          initialRouteName={RootScreenNames.Clippings}
+          screenOptions={{
+            contentStyle: styles.sceneContent,
+            headerRight: HeaderRight,
+          }}>
+          <Stack.Screen
+            name={RootScreenNames.Clippings}
+            component={Home}
+            options={{title: 'Kindleremind'}}
+          />
+          <Stack.Screen
+            name={RootScreenNames.ApiKeys}
+            component={ApiKeysView}
+            options={{title: 'API Keys'}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 

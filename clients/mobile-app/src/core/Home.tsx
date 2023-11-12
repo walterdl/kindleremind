@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {Text, Button, makeStyles} from '@rneui/themed';
 
 import {useNavigation, RootScreenNames} from './Navigation';
-import {PushNotifications} from './PushNotifications';
+import {PushNotificationsPermission} from './pushNotifications';
 import {useUser} from './useUser';
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +27,7 @@ export function Home() {
   return (
     <View>
       <Text style={styles.title}>Hi {user.firstName}! 👋🏽</Text>
-      <PushNotifications />
+      <PushNotificationsPermission />
       <View style={styles.space} />
       <Button title="API Keys" onPress={goToApiKeys} />
     </View>
