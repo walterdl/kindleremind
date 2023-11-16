@@ -5,6 +5,7 @@ import {Text, Button, makeStyles} from '@rneui/themed';
 import {useNavigation, RootScreenNames} from './Navigation';
 import {PushNotificationsPermission} from './pushNotifications';
 import {useUser} from './useUser';
+import {ScreenContainer} from '../components/ScreenContainer';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -25,11 +26,11 @@ export function Home() {
   const user = useUser();
 
   return (
-    <View>
+    <ScreenContainer>
       <Text style={styles.title}>Hi {user.firstName}! 👋🏽</Text>
       <PushNotificationsPermission />
       <View style={styles.space} />
       <Button title="API Keys" onPress={goToApiKeys} />
-    </View>
+    </ScreenContainer>
   );
 }

@@ -1,15 +1,5 @@
 import {makeStyles} from '@rneui/themed';
 
-export const useStyles = makeStyles(() => ({
-  root: {
-    position: 'relative',
-    flex: 1,
-  },
-  cardsContainer: {
-    flex: 1,
-  },
-}));
-
 export const useLoadingStyles = makeStyles(theme => ({
   container: {
     height: '100%',
@@ -59,6 +49,10 @@ export const useEmptyIndicatorStyles = makeStyles(() => ({
 }));
 
 export const useApiKeyCardStyles = makeStyles(theme => ({
+  container: {
+    margin: 0,
+    marginBottom: theme.spacing.md,
+  },
   valueLabelContainer: {
     flexDirection: 'row',
     position: 'relative',
@@ -91,16 +85,11 @@ export const useApiKeyCardStyles = makeStyles(theme => ({
 export const useCreateApiKeyStyles = makeStyles(theme => ({
   addButtonContainer: {
     position: 'absolute',
-    right: theme.spacing.xl,
+    right: 0,
     bottom: theme.spacing.xl + theme.spacing.xl,
     width: 'auto',
     height: 'auto',
     display: 'flex',
-  },
-  addButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
   },
   overlayContainer: {
     width: 250,

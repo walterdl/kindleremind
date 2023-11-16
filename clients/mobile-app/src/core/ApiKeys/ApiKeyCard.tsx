@@ -33,7 +33,7 @@ export function ApiKeyCard(props: Props) {
   }, [error]);
 
   return (
-    <Card>
+    <Card containerStyle={styles.container}>
       <Card.Title>{props.apiKey.name}</Card.Title>
       <Card.Divider />
       <View>

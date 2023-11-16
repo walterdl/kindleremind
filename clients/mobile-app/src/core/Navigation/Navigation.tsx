@@ -10,11 +10,12 @@ import {Home} from '../Home';
 import {ApiKeysView} from '../ApiKeys';
 import {useSavePushToken} from './useSavePushToken';
 import {PushNotificationsPresenter} from '../pushNotifications';
+import {Schedules} from '../Schedules';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const useStyles = makeStyles(theme => ({
   sceneContent: {
-    padding: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.md,
   },
 }));
 
@@ -43,6 +44,11 @@ export function AppNavigation(): JSX.Element {
             name={RootScreenNames.ApiKeys}
             component={ApiKeysView}
             options={{title: 'API Keys'}}
+          />
+          <Stack.Screen
+            name={RootScreenNames.Schedules}
+            component={Schedules}
+            options={{title: 'Schedules'}}
           />
         </Stack.Navigator>
       </NavigationContainer>

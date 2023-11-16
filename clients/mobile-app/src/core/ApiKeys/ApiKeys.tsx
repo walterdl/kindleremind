@@ -3,7 +3,6 @@ import {View, ActivityIndicator, ScrollView, Image} from 'react-native';
 import {Text, Button} from '@rneui/themed';
 
 import {
-  useStyles,
   useEmptyIndicatorStyles,
   useLoadingStyles,
   useErrorIndicatorStyles,
@@ -12,6 +11,7 @@ import {useGetApiKeys} from './useGetApiKeys';
 import {ApiKeyCard} from './ApiKeyCard';
 import {ApiKeysStateProvider, useApiKeysState} from './apiKeysState';
 import {CreateApiKey} from './CreateApiKey';
+import {ScreenContainer} from '../../components/ScreenContainer';
 
 export function ApiKeysView() {
   return (
@@ -22,20 +22,19 @@ export function ApiKeysView() {
 }
 
 function ApiKeysContent() {
-  const styles = useStyles();
   const [apiKeys] = useApiKeysState();
   let {loading, error, getApiKeys} = useGetApiKeys();
   const showApiKeyCreator = !loading && !error;
   const showEmptyIndicator = apiKeys.length === 0 && showApiKeyCreator;
 
   return (
-    <View style={styles.root}>
+    <ScreenContainer>
       {loading && <LoadingIndicator />}
       {error && <ErrorIndicator getApiKeys={getApiKeys} />}
       {showEmptyIndicator && <EmptyIndicator />}
       {apiKeys.length > 0 && (
         <ScrollView>
-          <View style={styles.cardsContainer}>
+          <View>
             {apiKeys.map((apiKey, i) => (
               <ApiKeyCard key={i} apiKey={apiKey} />
             ))}
@@ -43,7 +42,7 @@ function ApiKeysContent() {
         </ScrollView>
       )}
       {showApiKeyCreator && <CreateApiKey />}
-    </View>
+    </ScreenContainer>
   );
 }
 

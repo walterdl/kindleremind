@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {Overlay, Button, Icon, Text, Input} from '@rneui/themed';
+import {Overlay, Button, Text, Input} from '@rneui/themed';
 
 import {useCreateApiKeyStyles} from './styles';
 import {useCreateApiKey} from './useCreateApiKey';
+import {AddButton} from '../../components/AddButton';
 
 export function CreateApiKey() {
   const styles = useCreateApiKeyStyles();
@@ -27,13 +28,7 @@ export function CreateApiKey() {
   return (
     <>
       <View style={styles.addButtonContainer}>
-        <Button
-          buttonStyle={styles.addButton}
-          containerStyle={styles.addButton}
-          type="solid"
-          onPress={() => setVisible(true)}>
-          <Icon name="add" />
-        </Button>
+        <AddButton onPress={() => setVisible(true)} />
       </View>
       <Overlay
         isVisible={visible}
