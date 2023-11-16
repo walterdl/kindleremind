@@ -13,6 +13,7 @@ export const initialTheme = createTheme({
     grey0: '#eef4f9',
     error: '#ec4631',
     primary: '#80CBC4',
+    navigationBackground: '#3f3f3f',
   },
   mode: 'dark',
 });
@@ -24,7 +25,7 @@ export function useNavigationTheme() {
     () => ({
       colors: {
         primary: theme.colors.primary,
-        background: '#3f3f3f',
+        background: theme.colors.navigationBackground,
         card: theme.colors.background,
         text: theme.colors.black,
         border: theme.colors.grey5,
@@ -36,6 +37,7 @@ export function useNavigationTheme() {
       theme.colors.background,
       theme.colors.black,
       theme.colors.grey5,
+      theme.colors.navigationBackground,
       theme.colors.primary,
     ],
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import {View} from 'react-native';
 import {makeStyles, Button} from '@rneui/themed';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -14,6 +15,10 @@ import {Schedules} from '../Schedules';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const useStyles = makeStyles(theme => ({
+  container: {
+    backgroundColor: theme.colors.background,
+    flex: 1,
+  },
   sceneContent: {
     paddingHorizontal: theme.spacing.md,
   },
@@ -26,7 +31,7 @@ export function AppNavigation(): JSX.Element {
   useSavePushToken();
 
   return (
-    <>
+    <View style={styles.container}>
       <PushNotificationsPresenter />
       <NavigationContainer theme={navigationTheme}>
         <Stack.Navigator
@@ -52,7 +57,7 @@ export function AppNavigation(): JSX.Element {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </View>
   );
 }
 

@@ -23,6 +23,10 @@ export function Home() {
   const goToApiKeys = useCallback(() => {
     navigation.navigate(RootScreenNames.ApiKeys);
   }, [navigation]);
+  const goToSchedules = useCallback(() => {
+    navigation.navigate(RootScreenNames.Schedules);
+  }, [navigation]);
+
   const user = useUser();
 
   return (
@@ -31,6 +35,8 @@ export function Home() {
       <PushNotificationsPermission />
       <View style={styles.space} />
       <Button title="API Keys" onPress={goToApiKeys} />
+      <View style={styles.space} />
+      <Button title="Reminder schedules" onPress={goToSchedules} />
     </ScreenContainer>
   );
 }

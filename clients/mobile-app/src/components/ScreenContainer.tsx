@@ -5,6 +5,7 @@ import {makeStyles} from '@rneui/themed';
 const useStyles = makeStyles(theme => ({
   container: {
     marginTop: theme.spacing.md,
+    flex: 1,
   },
 }));
 
