@@ -1,53 +1,5 @@
 import {makeStyles} from '@rneui/themed';
 
-export const useLoadingStyles = makeStyles(theme => ({
-  container: {
-    height: '100%',
-    justifyContent: 'center',
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  activityIndicator: {
-    marginLeft: theme.spacing.sm,
-  },
-}));
-
-export const useErrorIndicatorStyles = makeStyles(theme => ({
-  errorTextContainer: {
-    marginBottom: theme.spacing.md,
-  },
-  errorContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-  reloadContainer: {flexDirection: 'row'},
-}));
-
-export const useEmptyIndicatorStyles = makeStyles(() => ({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    marginTop: -60,
-  },
-  imageContainer: {
-    width: 200,
-    alignItems: 'center',
-  },
-  image: {
-    width: '100%',
-    height: undefined,
-    aspectRatio: 1,
-  },
-  text: {
-    textAlign: 'center',
-  },
-}));
-
 export const useApiKeyCardStyles = makeStyles(theme => ({
   container: {
     margin: 0,
