@@ -8,9 +8,22 @@ import {EmptyIndicator} from '../../components/EmptyIndicator';
 import {ErrorIndicator} from '../../components/ErrorIndicator';
 import {ScheduleCard} from './ScheduleCard';
 import {CreateSchedule} from './CreateSchedule';
+import {
+  ReminderSchedulesStateProvider,
+  useSchedulesState,
+} from './schedulesState';
 
-export function Schedules() {
-  const {schedules, loading, error, refetch} = useGetSchedules();
+export function SchedulesView() {
+  return (
+    <ReminderSchedulesStateProvider>
+      <SchedulesContent />
+    </ReminderSchedulesStateProvider>
+  );
+}
+
+function SchedulesContent() {
+  const [schedules] = useSchedulesState();
+  const {loading, error, refetch} = useGetSchedules();
 
   const isEmpty = !loading && !error && schedules.length === 0;
   const showContent = !loading && !error && schedules.length > 0;

@@ -29,4 +29,4 @@ export function ApiKeysStateProvider(props: {children: ReactElement}) {
   );
 }
 
-export type ApiKeysState = [ApiKey[], (apiKeys: ApiKey[]) => void];
+type ApiKeysState = [ApiKey[], (apiKeys: ApiKey[]) => void];

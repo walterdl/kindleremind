@@ -2,12 +2,13 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 
 import {Fetch, useFetch} from '../../utils/useFetch';
 import {ReminderSchedule} from './types';
+import {useSchedulesState} from './schedulesState';
 
 export function useGetSchedules() {
+  const fetch = useFetch();
+  const [, setSchedules] = useSchedulesState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [schedules, setSchedules] = useState<ReminderSchedule[]>([]);
-  const fetch = useFetch();
 
   const refetch = useCallback(async () => {
     setLoading(true);
@@ -20,11 +21,11 @@ export function useGetSchedules() {
     } finally {
       setLoading(false);
     }
-  }, [fetch]);
+  }, [fetch, setSchedules]);
 
   useInitialFetch(refetch);
 
-  return {refetch, loading, error, schedules};
+  return {refetch, loading, error};
 }
 
 function useInitialFetch(refetch: () => void) {
