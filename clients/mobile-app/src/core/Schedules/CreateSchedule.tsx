@@ -88,6 +88,14 @@ export function CreateSchedule() {
             again
           </Text>
         )}
+        <Button
+          type="clear"
+          title="Cancel"
+          disabled={loading}
+          onPress={() => {
+            setVisible(false);
+          }}
+        />
       </Overlay>
     </>
   );

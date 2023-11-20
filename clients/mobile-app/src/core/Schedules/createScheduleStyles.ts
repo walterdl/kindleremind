@@ -20,12 +20,11 @@ export const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
   },
   createButton: {
-    marginTop: theme.spacing.md,
+    marginVertical: theme.spacing.md,
   },
   error: {
     color: theme.colors.error,
     alignSelf: 'center',
     textAlign: 'center',
-    marginTop: theme.spacing.md,
   },
 }));
