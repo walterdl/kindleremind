@@ -2,11 +2,13 @@ import {useCallback, useState} from 'react';
 
 import {useFetch} from '../../utils/useFetch';
 import {ReminderSchedule} from './types';
+import {useSchedulesState} from './schedulesState';
 
 export function useCreateSchedule(options: UseCreateScheduleOptions) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const post = usePost();
+  const addScheduleToState = useAddScheduleToState();
   const {onSuccess} = options;
 
   const createSchedule = useCallback(
@@ -14,7 +16,7 @@ export function useCreateSchedule(options: UseCreateScheduleOptions) {
       try {
         setLoading(true);
         setError(false);
-        await post(schedule);
+        addScheduleToState(await post(schedule));
         onSuccess?.();
       } catch {
         setError(true);
@@ -22,7 +24,7 @@ export function useCreateSchedule(options: UseCreateScheduleOptions) {
         setLoading(false);
       }
     },
-    [onSuccess, post],
+    [addScheduleToState, onSuccess, post],
   );
 
   const cleanError = useCallback(() => {
@@ -49,6 +51,17 @@ function usePost() {
       return response.json() as Promise<ReminderSchedule>;
     },
     [fetch],
+  );
+}
+
+function useAddScheduleToState() {
+  const [schedules, setSchedules] = useSchedulesState();
+
+  return useCallback(
+    (apiKey: ReminderSchedule) => {
+      setSchedules([apiKey, ...schedules]);
+    },
+    [schedules, setSchedules],
   );
 }
 
