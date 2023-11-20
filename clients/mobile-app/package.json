@@ -15,6 +15,7 @@
     "@notifee/react-native": "^7.8.0",
     "@react-native-async-storage/async-storage": "^1.19.4",
     "@react-native-clipboard/clipboard": "^1.12.1",
+    "@react-native-community/datetimepicker": "^7.6.1",
     "@react-native-community/netinfo": "^11.0.0",
     "@react-native-firebase/app": "^18.6.1",
     "@react-native-firebase/messaging": "^18.6.1",

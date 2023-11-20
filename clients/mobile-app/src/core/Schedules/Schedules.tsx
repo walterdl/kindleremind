@@ -7,6 +7,7 @@ import {LoadingIndicator} from '../../components/LoadingIndicator';
 import {EmptyIndicator} from '../../components/EmptyIndicator';
 import {ErrorIndicator} from '../../components/ErrorIndicator';
 import {ScheduleCard} from './ScheduleCard';
+import {CreateSchedule} from './CreateSchedule';
 
 export function Schedules() {
   const {schedules, loading, error, refetch} = useGetSchedules();
@@ -34,6 +35,7 @@ export function Schedules() {
           </View>
         </ScrollView>
       )}
+      {(isEmpty || showContent) && <CreateSchedule />}
     </ScreenContainer>
   );
 }

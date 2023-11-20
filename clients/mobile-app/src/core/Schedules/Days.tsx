@@ -18,6 +18,26 @@ const WEEKDAY_NAMES = {
 export function Days(props: Props) {
   const styles = useStyles();
 
+  const toggleDay = (day: Weekday) => {
+    if (!props.onChange) {
+      return;
+    }
+
+    // Always create a new array to trigger a re-render.
+    const result = [...(props.value || [])];
+    const index = result.indexOf(day as Weekday);
+
+    if (index >= 0) {
+      // If the day is already selected, remove it from the selection.
+      result.splice(index, 1);
+    } else {
+      // Otherwise, add it.
+      result.push(day as Weekday);
+    }
+
+    props.onChange(result);
+  };
+
   return (
     <View style={styles.container}>
       {Object.keys(WEEKDAY_NAMES).map(day => {
@@ -41,6 +61,7 @@ export function Days(props: Props) {
             disabledTitleStyle={disabledTitleStyle}
             disabled={props.readonly}
             title={WEEKDAY_NAMES[day as Weekday]}
+            onPress={() => toggleDay(day as Weekday)}
           />
         );
       })}

@@ -4,7 +4,7 @@ import {Text, Button, Card, Icon} from '@rneui/themed';
 
 import {useStyles} from './scheduleCardStyles';
 import {ReminderSchedule} from './types';
-import {to12Hours} from './to12Hours';
+import {to12UtcHours} from './to12UtcHours';
 import {Days} from './Days';
 
 export function ScheduleCard(props: Props) {
@@ -15,8 +15,10 @@ export function ScheduleCard(props: Props) {
       <View style={styles.content}>
         <Text>
           Repeats at{' '}
-          <Text style={styles.time}>{to12Hours(props.schedule.time)}</Text>{' '}
-          <Text>({props.schedule.timezone})</Text> on:
+          <Text style={styles.time}>
+            {to12UtcHours(props.schedule.datetime)}
+          </Text>{' '}
+          (UTC) on:
         </Text>
         <Days value={props.schedule.weekdays} readonly />
         <View style={styles.optionsContainer}>

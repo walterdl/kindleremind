@@ -27,9 +27,7 @@ export function CreateApiKey() {
 
   return (
     <>
-      <View style={styles.addButtonContainer}>
-        <AddButton onPress={() => setVisible(true)} />
-      </View>
+      <AddButton onPress={() => setVisible(true)} />
       <Overlay
         isVisible={visible}
         onBackdropPress={() => {

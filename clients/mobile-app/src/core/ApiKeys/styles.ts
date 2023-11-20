@@ -35,14 +35,6 @@ export const useApiKeyCardStyles = makeStyles(theme => ({
 }));
 
 export const useCreateApiKeyStyles = makeStyles(theme => ({
-  addButtonContainer: {
-    position: 'absolute',
-    right: 0,
-    bottom: theme.spacing.xl + theme.spacing.xl,
-    width: 'auto',
-    height: 'auto',
-    display: 'flex',
-  },
   overlayContainer: {
     width: 250,
   },
