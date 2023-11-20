@@ -1,14 +1,31 @@
-import React from 'react';
-import {View} from 'react-native';
+import React, {useEffect} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import {Text, Button, Card, Icon} from '@rneui/themed';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 import {useStyles} from './scheduleCardStyles';
 import {ReminderSchedule} from './types';
 import {to12UtcHours} from './to12UtcHours';
 import {Days} from './Days';
+import {useDeleteSchedule} from './useDeleteSchedule';
 
 export function ScheduleCard(props: Props) {
   const styles = useStyles();
+  const {deleteSchedule, error, loading} = useDeleteSchedule();
+
+  useEffect(() => {
+    if (error) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Error',
+        textBody: "Couldn't delete schedule. Please, try again.",
+        autoClose: true,
+        onPress: () => {
+          Toast.hide();
+        },
+      });
+    }
+  }, [error]);
 
   return (
     <Card containerStyle={styles.container}>
@@ -26,9 +43,15 @@ export function ScheduleCard(props: Props) {
             buttonStyle={styles.deleteButtonStyle}
             titleStyle={styles.deleteButtonLabelStyle}
             color="error"
-            type="outline">
+            type="outline"
+            disabled={loading}
+            onPress={() => deleteSchedule(props.schedule)}>
             Delete{' '}
-            <Icon name="delete" color={styles.deleteButtonLabelStyle.color} />
+            {loading ? (
+              <ActivityIndicator />
+            ) : (
+              <Icon name="delete" color={styles.deleteButtonLabelStyle.color} />
+            )}
           </Button>
         </View>
       </View>
