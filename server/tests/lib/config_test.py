@@ -9,15 +9,28 @@ def test_uses_hardcoded_values_if_env_is_test(clean_env_vars):
         assert get_config(name) == f'{name}_test_value'
 
 
-def test_uses_ssm_values_by_default(ssm_client):
+def test_uses_env_var_by_default_if_env_has_value(clean_env_vars):
+    # Mongo URI already has ssm_env_var. By setting a local env var as well,
+    # we can test that the local env var is preferred over the ssm_env_var.
+    mongo_uri_env_var_name = NAMES['mongodb_uri']['env_var']
+    clean_env_vars[mongo_uri_env_var_name] = 'Mongo URI env var value'
+
+    assert get_config('mongodb_uri') == 'Mongo URI env var value'
+
+
+def test_uses_ssm_values_if_env_has_no_value(ssm_client):
     for name in NAMES:
-        ssm_env_var_name = NAMES[name]['ssm_env_var']
-        assert get_config(name) == ssm_value(ssm_env_var_name)
+        if 'ssm_env_var' in NAMES[name]:
+            ssm_env_var_name = NAMES[name]['ssm_env_var']
+            assert get_config(name) == ssm_value(ssm_env_var_name)
 
 
 def test_gets_secure_ssm_params_with_correct_arguments(ssm_client):
     i = 0
     for name in NAMES:
+        if 'ssm_env_var' not in NAMES[name]:
+            continue
+
         get_config(name)
         assert ssm_client.mock_calls[i].kwargs['Name'] == NAMES[name]['ssm_env_var']
         assert ssm_client.mock_calls[i].kwargs['WithDecryption'] == True

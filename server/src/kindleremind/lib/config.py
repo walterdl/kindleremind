@@ -9,6 +9,15 @@ NAMES = {
     'api_key': {
         'env_var': 'API_KEY',
         'ssm_env_var': 'API_KEY_SSM_NAME',
+    },
+    'max_schedules_per_user': {
+        'env_var': 'MAX_SCHEDULES_PER_USER',
+    },
+    'reminder_sns_topic_arn': {
+        'env_var': 'REMINDER_SNS_TOPIC_ARN',
+    },
+    'publish_reminder_role_arn': {
+        'env_var': 'PUBLISH_REMINDER_ROLE_ARN',
     }
 }
 
@@ -27,9 +36,16 @@ def get_config(name):
     if name in get_config._cache:
         return get_config._cache[name]
 
-    get_config._cache[name] = _get_ssm_value(
-        environ.get(config_sources['ssm_env_var'])
-    )
+    # Env var takes precedence over SSM param
+    if config_sources['env_var'] in environ:
+        value = environ.get(config_sources['env_var'])
+    else:
+        value = _get_ssm_value(
+            environ.get(config_sources['ssm_env_var'])
+        )
+
+    # Store in cache for future calls, avoiding unnecessary SSM calls.
+    get_config._cache[name] = value
 
     return get_config._cache[name]
 

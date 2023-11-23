@@ -7,8 +7,9 @@ import pytest
 def clean_env_vars():
     env_vars = {}
     for name in NAMES:
-        ssm_env_var_name = NAMES[name]['ssm_env_var']
-        env_vars[ssm_env_var_name] = ssm_env_var_name
+        if 'ssm_env_var' in NAMES[name]:
+            ssm_env_var_name = NAMES[name]['ssm_env_var']
+            env_vars[ssm_env_var_name] = ssm_env_var_name
 
     with patch.dict('kindleremind.lib.config.environ', env_vars, clear=True) as environ:
         yield environ
