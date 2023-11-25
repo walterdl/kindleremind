@@ -15,12 +15,12 @@ setupmongo = "bash -c 'cd infrastructure && python mongodb.py'"
 [packages]
 pymongo = "*"
 mmh3 = "*"
+boto3 = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-watch = "*"
 flask = "*"
-boto3 = "*"
 pytest-dotenv = "*"
 python-dotenv = "*"
 

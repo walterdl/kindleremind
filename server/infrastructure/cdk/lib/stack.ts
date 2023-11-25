@@ -9,13 +9,17 @@ import {
   HttpLambdaAuthorizer,
   HttpLambdaResponseType,
 } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
+import * as iam from "aws-cdk-lib/aws-iam";
 
 import { SSM_PARAM_NAMES, SsmParams } from "./ssm-params";
 import { KrCognitoUserPool } from "./cognito-user-pool";
+import { Scheduler } from "./scheduler";
 
 export class Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    const scheduler = new Scheduler(this, "Scheduler");
 
     const apiKeyAuthorizerFunction = new python.PythonFunction(
       this,
@@ -177,6 +181,49 @@ export class Stack extends cdk.Stack {
       deleteApiKeyFunction
     );
 
+    const postScheduleFunction = new python.PythonFunction(
+      this,
+      "PostScheduleFunction",
+      {
+        entry: path.resolve(__dirname, "../../../src"),
+        runtime: lambda.Runtime.PYTHON_3_11,
+        index: "kindleremind/api/post_schedule/handler.py",
+        handler: "lambda_handler",
+        environment: {
+          ...SSM_PARAM_NAMES,
+          MAX_SCHEDULES_PER_USER: "2",
+          REMINDER_SNS_TOPIC_ARN: scheduler.remindersSnsTopic.topicArn,
+          PUBLISH_REMINDER_ROLE_ARN: scheduler.publishRemindersIamRole.roleArn,
+        },
+      }
+    );
+    const postScheduleIntegration = new HttpLambdaIntegration(
+      "PostScheduleIntegration",
+      postScheduleFunction
+    );
+
+    scheduler.eventBus.grantPutEventsTo(postScheduleFunction);
+
+    postScheduleFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["scheduler:CreateSchedule"],
+        resources: ["*"],
+      })
+    );
+    postScheduleFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["iam:PassRole"],
+        resources: [scheduler.publishRemindersIamRole.roleArn],
+        conditions: {
+          StringEquals: {
+            "iam:PassedToService": "scheduler.amazonaws.com",
+          },
+        },
+      })
+    );
+
     const ssmParams = new SsmParams(this, "SsmParams");
     ssmParams.grantRead([
       apiKeyAuthorizerFunction,
@@ -187,6 +234,7 @@ export class Stack extends cdk.Stack {
       getApiKeysFunction,
       postApiKeyFunction,
       deleteApiKeyFunction,
+      postScheduleFunction,
     ]);
 
     const cognitoUserPool = new KrCognitoUserPool(this, "KrCognitoUserPool");
@@ -244,6 +292,11 @@ export class Stack extends cdk.Stack {
       path: "/api-keys",
       methods: [apigwv2.HttpMethod.DELETE],
       integration: deleteApiKeyIntegration,
+    });
+    httpApi.addRoutes({
+      path: "/schedules",
+      methods: [apigwv2.HttpMethod.POST],
+      integration: postScheduleIntegration,
     });
   }
 }

@@ -16,7 +16,7 @@ class CreateReminderScheduleService:
             'datetime': datetime.fromisoformat(schedule_input['datetime']),
             'weekdays': schedule_input['weekdays'],
         })
-        self.scheduler.schedule_notification(schedule)
+        self.scheduler.schedule_reminder(schedule)
 
         return schedule
 

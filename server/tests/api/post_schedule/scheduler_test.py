@@ -55,7 +55,7 @@ def test_sets_schedule_expression_correctly(instance, schedule_input):
     cron_expression = instance.eventbridge_client.create_schedule.call_args.kwargs[
         'ScheduleExpression']
 
-    assert cron_expression == '30 9 ? * MON-TUE-THU *'
+    assert cron_expression == 'cron(30 9 ? * MON,TUE,THU *)'
 
 
 def test_sets_schedule_expression_timezone_to_utc(instance, schedule_input):

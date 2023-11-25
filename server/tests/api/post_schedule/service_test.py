@@ -54,7 +54,7 @@ def test_creates_schedule_using_storage(instance, schedule):
 def test_creates_scheduled_notification_using_notification_scheduler(instance, schedule, schedule_record):
     instance.create(schedule)
 
-    instance.scheduler.schedule_notification.assert_called_once_with(
+    instance.scheduler.schedule_reminder.assert_called_once_with(
         schedule_record)
 
 

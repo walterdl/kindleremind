@@ -17,7 +17,7 @@ class Scheduler:
                 'Mode': 'OFF'
             },
             Name=schedule['id'],
-            ScheduleExpression=generate_cron_expression(schedule),
+            ScheduleExpression=f'cron({generate_cron_expression(schedule)})',
             ScheduleExpressionTimezone='UTC',
             State='ENABLED',
             Target={
