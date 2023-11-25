@@ -2,35 +2,19 @@
 
 from importlib import import_module
 from flask import Flask, request
-from endpoints import endpoints
 import traceback
 import json
+import yaml
 
 
 app = Flask(__name__)
 
-for path in endpoints:
-    for method in endpoints[path].keys():
 
-        @app.route(path, methods=[method.upper()], endpoint=f"{path}_{method}")
-        def handler(path=path):
-            endpoint_config = endpoints[path][request.method.lower()]
-            handler_module = import_module(endpoint_config['handler_module'])
-            handler_func = getattr(
-                handler_module, endpoint_config['handler_func'])
+def get_lambda_specs():
+    with open('../lambdas.yml') as lambda_configs_file:
+        lambda_configs = yaml.load(lambda_configs_file, Loader=yaml.Loader)
 
-            try:
-                context = None
-                response = handler_func(build_event(), context)
-
-                return format_lambda_response(response, endpoint_config)
-            except Exception as error:
-                body = {
-                    'error': str(error),
-                    'traceback': traceback.format_exception(error)
-                }
-
-                return body, 500, {'Content-Type': 'application/json'}
+    return (x for x in lambda_configs.values() if x['type'] == 'endpoint')
 
 
 def build_event():
@@ -60,10 +44,34 @@ def build_event():
     return result
 
 
-def format_lambda_response(response, endpoint_config):
-    response_type = endpoint_config.get('response_type', 'lambda_proxy')
-    if (response_type == 'lambda_proxy'):
+def format_lambda_response(response, lambda_spec):
+    if (lambda_spec.get('type', 'endpoint') == 'endpoint'):
         return response.get('body', ''), response['statusCode'], response['headers']
 
     body = json.dumps(response) if response else "{}"
     return body, 200, {'Content-Type': 'application/json'}
+
+
+for lambda_spec in get_lambda_specs():
+    @app.route(
+        lambda_spec['path'],
+        methods=[lambda_spec['method'].upper()],
+        endpoint=f"{lambda_spec['path']}_{lambda_spec['method']}"
+    )
+    def handler(lambda_spec=lambda_spec):
+        handler_module = import_module(lambda_spec['handler_module'])
+        handler_func = getattr(
+            handler_module, lambda_spec['handler_func'])
+
+        try:
+            context = None
+            response = handler_func(build_event(), context)
+
+            return format_lambda_response(response, lambda_spec)
+        except Exception as error:
+            body = {
+                'error': str(error),
+                'traceback': traceback.format_exception(error)
+            }
+
+            return body, 500, {'Content-Type': 'application/json'}

@@ -23,6 +23,7 @@ pytest-watch = "*"
 flask = "*"
 pytest-dotenv = "*"
 python-dotenv = "*"
+pyyaml = "*"
 
 [requires]
 python_full_version = "3.11.4"

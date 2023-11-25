@@ -1,0 +1,14 @@
+{
+  "requestContext": {
+    "authorizer": {
+      "jwt": {
+        "claims": {
+          "email": "..." // email address of the user
+        }
+      },
+      "lambda": {
+        "email": "..." // email address of the user
+      }
+    }
+  }
+}
