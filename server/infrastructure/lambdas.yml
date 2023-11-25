@@ -1,0 +1,60 @@
+ApiKeyAuthorizer:
+  type: worker
+  handler_module: kindleremind.api.api_key_authorizer.handler
+  handler_func: lambda_handler
+PostClippings:
+  type: endpoint
+  method: post
+  path: /clippings
+  auth: api-key
+  handler_module: kindleremind.api.post_clippings.handler
+  handler_func: lambda_handler
+GetClippings:
+  type: endpoint
+  method: get
+  path: /clippings
+  auth: api-key
+  handler_module: kindleremind.api.get_clippings.handler
+  handler_func: lambda_handler
+PostPushToken:
+  type: endpoint
+  method: post
+  path: /push-token
+  auth: cognito
+  handler_module: kindleremind.api.post_push_token.handler
+  handler_func: lambda_handler
+DeletePushToken:
+  type: endpoint
+  method: delete
+  path: /push-token
+  auth: cognito
+  handler_module: kindleremind.api.delete_push_token.handler
+  handler_func: lambda_handler
+GetApiKeys:
+  type: endpoint
+  method: get
+  path: /api-keys
+  auth: cognito
+  handler_module: kindleremind.api.get_api_keys.handler
+  handler_func: lambda_handler
+PostApiKey:
+  type: endpoint
+  method: post
+  path: /api-keys
+  auth: cognito
+  handler_module: kindleremind.api.post_api_key.handler
+  handler_func: lambda_handler
+DeleteApiKey:
+  type: endpoint
+  method: delete
+  path: /api-keys
+  auth: cognito
+  handler_module: kindleremind.api.delete_api_key.handler
+  handler_func: lambda_handler
+PostSchedule:
+  type: endpoint
+  method: post
+  path: /schedules
+  auth: cognito
+  handler_module: kindleremind.api.post_schedule.handler
+  handler_func: lambda_handler
