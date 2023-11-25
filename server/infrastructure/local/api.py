@@ -20,7 +20,8 @@ for path in endpoints:
                 handler_module, endpoint_config['handler_func'])
 
             try:
-                response = handler_func(build_event())
+                context = None
+                response = handler_func(build_event(), context)
 
                 return format_lambda_response(response, endpoint_config)
             except Exception as error:

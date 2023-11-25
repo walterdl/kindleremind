@@ -1,3 +1,4 @@
+import inspect
 import json
 
 
@@ -13,7 +14,12 @@ def get_handler_wrapper(app_handler, build_app_context):
 
     def handler_wrapper(event, context):
         event['app_context'] = build_app_context(event)
-        result = app_handler(event, context)
+
+        handler_args = [event]
+        if _invoke_with_context(app_handler):
+            handler_args.append(context)
+
+        result = app_handler(*handler_args)
 
         return _format_result(result)
 
@@ -32,3 +38,9 @@ def _format_result(raw_result):
         response['body'] = json.dumps(raw_result)
 
     return response
+
+
+def _invoke_with_context(handler):
+    sig = inspect.signature(handler)
+
+    return len(sig.parameters) > 1
