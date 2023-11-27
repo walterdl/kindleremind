@@ -58,3 +58,10 @@ PostSchedule:
   auth: cognito
   handler_module: kindleremind.api.post_schedule.handler
   handler_func: lambda_handler
+GetSchedule:
+  type: endpoint
+  method: get
+  path: /schedules
+  auth: cognito
+  handler_module: kindleremind.api.get_schedules.handler
+  handler_func: lambda_handler
