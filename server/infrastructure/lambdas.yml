@@ -65,3 +65,10 @@ GetSchedule:
   auth: cognito
   handler_module: kindleremind.api.get_schedules.handler
   handler_func: lambda_handler
+DeleteSchedule:
+  type: endpoint
+  method: delete
+  path: /schedules
+  auth: cognito
+  handler_module: kindleremind.api.delete_schedule.handler
+  handler_func: lambda_handler
