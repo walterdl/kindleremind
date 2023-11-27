@@ -8,7 +8,7 @@ from kindleremind.lib.mongodb.id_validator import validate_mongodb_id
 
 @pytest.fixture()
 def instance(app_context):
-    return DeleteScheduleService(context=app_context, storage=Mock(), validate_storage_id=validate_mongodb_id)
+    return DeleteScheduleService(context=app_context, storage=Mock(), validate_storage_id=validate_mongodb_id, scheduler=Mock())
 
 
 def test_throws_error_if_schedule_id_is_invalid(instance):
@@ -23,3 +23,10 @@ def test_delete_schedule_of_user_identified_by_given_id(instance, app_context, d
         "id": doc_id,
         "user": app_context['email'],
     })
+
+
+def test_delete_scheduled_reminder(instance, doc_id):
+    instance.delete_schedule(doc_id)
+
+    instance.scheduler.delete_scheduled_reminder.assert_called_once_with(
+        doc_id)

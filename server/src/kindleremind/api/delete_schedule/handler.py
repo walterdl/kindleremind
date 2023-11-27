@@ -7,3 +7,7 @@ def lambda_handler(event):
     schedule_id = event['queryStringParameters'].get('id', None)
     service = get_service(event['app_context'])
     service.delete_schedule(schedule_id)
+
+    return {
+        'success': True,
+    }
