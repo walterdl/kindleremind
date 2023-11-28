@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { Stack } from "aws-cdk-lib";
 import * as sns from "aws-cdk-lib/aws-sns";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as eventBridge from "aws-cdk-lib/aws-events";
@@ -50,10 +51,13 @@ export class Scheduler extends Construct {
     );
     this.publishRemindersIamPolicy.attachToRole(this.publishRemindersIamRole);
 
-    this.grantPermissionsToPostSchedules(props.postScheduleLambda);
+    this.grantPermissionsToLambdas(props);
   }
 
-  private grantPermissionsToPostSchedules(postScheduleLambda: lambda.Function) {
+  private grantPermissionsToLambdas({
+    deleteScheduleLambda,
+    postScheduleLambda,
+  }: Props) {
     postScheduleLambda.addEnvironment("MAX_SCHEDULES_PER_USER", "2");
     postScheduleLambda.addEnvironment(
       "REMINDER_SNS_TOPIC_ARN",
@@ -63,13 +67,17 @@ export class Scheduler extends Construct {
       "PUBLISH_REMINDER_ROLE_ARN",
       this.publishRemindersIamRole.roleArn
     );
-    this.eventBus.grantPutEventsTo(postScheduleLambda);
 
+    this.eventBus.grantPutEventsTo(postScheduleLambda);
+    const defaultSchedulerBus = Stack.of(this).formatArn({
+      service: "scheduler",
+      resource: "schedule/default/*",
+    });
     postScheduleLambda.addToRolePolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ["scheduler:CreateSchedule"],
-        resources: ["*"],
+        resources: [defaultSchedulerBus],
       })
     );
     postScheduleLambda.addToRolePolicy(
@@ -84,9 +92,18 @@ export class Scheduler extends Construct {
         },
       })
     );
+
+    deleteScheduleLambda.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["scheduler:DeleteSchedule"],
+        resources: [defaultSchedulerBus],
+      })
+    );
   }
 }
 
 interface Props {
   postScheduleLambda: lambda.Function;
+  deleteScheduleLambda: lambda.Function;
 }
