@@ -58,7 +58,7 @@ export class Scheduler extends Construct {
     deleteScheduleLambda,
     postScheduleLambda,
   }: Props) {
-    postScheduleLambda.addEnvironment("MAX_SCHEDULES_PER_USER", "2");
+    postScheduleLambda.addEnvironment("MAX_SCHEDULES_PER_USER", "10");
     postScheduleLambda.addEnvironment(
       "REMINDER_SNS_TOPIC_ARN",
       this.remindersSnsTopic.topicArn
