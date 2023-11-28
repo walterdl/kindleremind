@@ -35,7 +35,7 @@ function useDelete() {
 
   return useCallback(
     async (schedule: ReminderSchedule) => {
-      const response = await fetch('/api-keys', {
+      const response = await fetch('/schedules', {
         method: 'delete',
         queryParams: {id: schedule.id},
       });

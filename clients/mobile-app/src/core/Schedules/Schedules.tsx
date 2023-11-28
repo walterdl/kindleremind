@@ -34,7 +34,7 @@ function SchedulesContent() {
       {isEmpty && (
         <EmptyIndicator
           message={
-            "You don't have any reminder schedule. Start creating one to receive your reminders."
+            "You don't have reminder schedules.\nStart creating one to receive your reminders."
           }
         />
       )}
