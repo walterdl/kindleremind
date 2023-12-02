@@ -1,4 +1,4 @@
 export * from './PushNotificationsPermission';
 export * from './PushNotificationsPresenter';
-export * from './handleBackgroundNotification';
+export * from './showBackgroundNotification';
 export * from './channel';
