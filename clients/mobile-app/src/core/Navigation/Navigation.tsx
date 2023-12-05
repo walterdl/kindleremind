@@ -12,6 +12,7 @@ import {ApiKeysView} from '../ApiKeys';
 import {useSavePushToken} from './useSavePushToken';
 import {PushNotificationsPresenter} from '../pushNotifications';
 import {Schedules} from '../Schedules';
+import {ClippingView} from '../Clipping';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const useStyles = makeStyles(theme => ({
@@ -32,16 +33,15 @@ export function AppNavigation(): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <PushNotificationsPresenter />
       <NavigationContainer theme={navigationTheme}>
         <Stack.Navigator
-          initialRouteName={RootScreenNames.Clippings}
+          initialRouteName={RootScreenNames.Home}
           screenOptions={{
             contentStyle: styles.sceneContent,
             headerRight: HeaderRight,
           }}>
           <Stack.Screen
-            name={RootScreenNames.Clippings}
+            name={RootScreenNames.Home}
             component={Home}
             options={{title: 'Kindleremind'}}
           />
@@ -55,7 +55,13 @@ export function AppNavigation(): JSX.Element {
             component={Schedules}
             options={{title: 'Schedules'}}
           />
+          <Stack.Screen
+            name={RootScreenNames.ClippingView}
+            component={ClippingView}
+            options={{title: 'Book highlight'}}
+          />
         </Stack.Navigator>
+        <PushNotificationsPresenter />
       </NavigationContainer>
     </View>
   );

@@ -1,7 +1,7 @@
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
 
-import {Clipping} from '../Clippings/types';
+import {Clipping} from '../Clipping/types';
 import {createDefaultChannel} from './channel';
 import {initialTheme} from '../../theme';
 

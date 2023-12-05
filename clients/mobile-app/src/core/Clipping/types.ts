@@ -12,6 +12,7 @@ export interface Clipping {
   key: number;
   user: string;
 }
+
 export enum ClippingType {
   Highlight = 'HIGHLIGHT',
   Bookmark = 'BOOKMARK',

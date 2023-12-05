@@ -1,11 +1,17 @@
+import {Clipping} from '../Clipping';
+
 export enum RootScreenNames {
-  Clippings = 'Clippings',
+  Home = 'Home',
   ApiKeys = 'ApiKeys',
   Schedules = 'Schedules',
+  ClippingView = 'Clipping',
 }
 
 export type RootStackParamList = {
-  [RootScreenNames.Clippings]: undefined;
+  [RootScreenNames.Home]: undefined;
   [RootScreenNames.ApiKeys]: undefined;
   [RootScreenNames.Schedules]: undefined;
+  [RootScreenNames.ClippingView]: {
+    clipping: Clipping;
+  };
 };
