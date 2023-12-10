@@ -55,7 +55,4 @@ def test_cancel_sending_if_no_clipping_in_storage(service, token):
 
 def test_send_clipping_using_sender_service_for_token_proto(service, token, clipping):
     service.send_clipping()
-    service._sender.send_clipping.assert_called_once_with({
-        'token': token,
-        'clipping': clipping
-    })
+    service._sender.send_clipping.assert_called_once_with(clipping, token)

@@ -16,7 +16,4 @@ class ClippingSenderService:
         if not clipping:
             return
 
-        self._sender.send_clipping({
-            'token': token,
-            'clipping': clipping
-        })
+        self._sender.send_clipping(clipping, token)

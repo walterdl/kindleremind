@@ -21,7 +21,6 @@ export async function showPushNotification(
         channelId: await createDefaultChannel(),
         smallIcon: 'ic_notif_small_icon',
         color: initialTheme.darkColors?.primary,
-        // red in hex
         pressAction: {
           id: clipping.id,
           launchActivity: 'default',

@@ -72,3 +72,7 @@ DeleteSchedule:
   auth: cognito
   handler_module: kindleremind.api.delete_schedule.handler
   handler_func: lambda_handler
+SendClipping:
+  type: worker
+  handler_module: kindleremind.workers.send_clipping.handler
+  handler_func: handler

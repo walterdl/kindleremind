@@ -4,6 +4,7 @@ import * as sns from "aws-cdk-lib/aws-sns";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as eventBridge from "aws-cdk-lib/aws-events";
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import { SnsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 
 export class Scheduler extends Construct {
   private eventBus: eventBridge.IEventBus;
@@ -24,6 +25,10 @@ export class Scheduler extends Construct {
       displayName: "KrRemindersSnsTopic",
       topicName: "KrRemindersSnsTopic",
     });
+
+    props.sendClippingLambda.addEventSource(
+      new SnsEventSource(this.remindersSnsTopic)
+    );
 
     this.publishRemindersIamPolicy = new iam.Policy(
       this,
@@ -51,10 +56,10 @@ export class Scheduler extends Construct {
     );
     this.publishRemindersIamPolicy.attachToRole(this.publishRemindersIamRole);
 
-    this.grantPermissionsToLambdas(props);
+    this.grantPublishPermissionsToLambdas(props);
   }
 
-  private grantPermissionsToLambdas({
+  private grantPublishPermissionsToLambdas({
     deleteScheduleLambda,
     postScheduleLambda,
   }: Props) {
@@ -106,4 +111,5 @@ export class Scheduler extends Construct {
 interface Props {
   postScheduleLambda: lambda.Function;
   deleteScheduleLambda: lambda.Function;
+  sendClippingLambda: lambda.Function;
 }

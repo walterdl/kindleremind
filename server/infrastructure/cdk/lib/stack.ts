@@ -33,6 +33,7 @@ export class Stack extends cdk.Stack {
     new Scheduler(this, "Scheduler", {
       postScheduleLambda: lambdas.getByName("PostSchedule"),
       deleteScheduleLambda: lambdas.getByName("DeleteSchedule"),
+      sendClippingLambda: lambdas.getByName("SendClipping"),
     });
 
     const ssmParams = new SsmParams(this, "SsmParams");
