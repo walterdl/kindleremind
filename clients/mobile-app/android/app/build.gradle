@@ -96,6 +96,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('release.keystore')
+            storePassword project.env.get("KEYSTORE_PASSWORD")
+            keyAlias project.env.get("KEYSTORE_ALIAS")
+            keyPassword project.env.get("KEY_PASSWORD")
+        }
     }
     buildTypes {
         debug {
