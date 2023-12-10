@@ -5,6 +5,8 @@ import { IGrantable } from "aws-cdk-lib/aws-iam";
 export const SSM_PARAM_NAMES = {
   MONGODB_URI_SSM_NAME: "/kindleremind/mongo-atlas/connection-uri",
   API_KEY_SSM_NAME: "/kindleremind/api-key",
+  FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_SSM_NAME:
+    "/kindleremind/firebase/service-account/private-key",
 };
 
 export class SsmParams extends Construct {

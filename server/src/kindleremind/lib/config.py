@@ -18,6 +18,10 @@ NAMES = {
     },
     'publish_reminder_role_arn': {
         'env_var': 'PUBLISH_REMINDER_ROLE_ARN',
+    },
+    'firebase_service_account_private_key': {
+        'env_var': 'FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY',
+        'ssm_env_var': 'FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_SSM_NAME',
     }
 }
 
