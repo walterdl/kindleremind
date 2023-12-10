@@ -1,3 +1,4 @@
+from datetime import datetime
 import pytest
 from unittest.mock import Mock
 
@@ -28,17 +29,17 @@ def test_replace_exiting_record(instance, push_token):
     assert upsert == True
 
 
-def test_filter_by_push_token_and_user_email(instance, push_token, app_context):
+def test_filter_by_user_email(instance, push_token, app_context):
     instance.save_token(push_token)
     used_filter = instance.collection.find_one_and_replace.call_args.args[0]
 
-    assert used_filter == {'token': push_token,
-                           'user': app_context['email']}
+    assert used_filter == {'user': app_context['email']}
 
 
 def test_create_new_record_with_same_token(instance, push_token, app_context):
     instance.save_token(push_token)
     new_record = instance.collection.find_one_and_replace.call_args.args[1]
 
-    assert new_record == {'token': push_token,
-                          'user': app_context['email']}
+    assert new_record['token'] == push_token
+    assert new_record['user'] == app_context['email']
+    assert isinstance(new_record['createdAt'], datetime)

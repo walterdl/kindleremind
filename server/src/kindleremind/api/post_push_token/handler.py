@@ -11,10 +11,4 @@ def lambda_handler(event, _context=None):
     payload = unmarshall(event['body'], return_none_if_error=True, default={})
     service.store(payload.get('pushToken'))
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps({'success': True}),
-        'headers': {
-            'Content-Type': 'application/json',
-        }
-    }
+    return {'success': True}
