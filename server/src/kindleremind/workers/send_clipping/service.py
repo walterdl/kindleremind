@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class ClippingSenderService:
     def __init__(self, clippings_storage, tokens_storage, senders_by_proto):
         self._clippings_storage = clippings_storage
@@ -21,3 +24,7 @@ class ClippingSenderService:
             'token': token,
             'clipping': clipping
         })
+
+
+class TokenProto(Enum):
+    FCM = 'fcm'

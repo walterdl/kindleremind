@@ -1,15 +1,14 @@
 import pytest
 from unittest.mock import Mock
 
-from kindleremind.workers.send_clipping.service import ClippingSenderService
-from kindleremind.workers.send_clipping.token_proto import TokenProto
+from kindleremind.workers.send_clipping.service import ClippingSenderService, TokenProto
 
 
 @pytest.fixture()
 def token():
     return {
         'value': 'Token value',
-        'proto': TokenProto.HMS,
+        'proto': TokenProto.FCM,
     }
 
 
@@ -29,7 +28,7 @@ def service(clipping, token):
     tokens_storage.get_token.return_value = token
 
     senders_by_storage = {
-        TokenProto.HMS: Mock()
+        TokenProto.FCM: Mock()
     }
 
     return ClippingSenderService(clippings_storage, tokens_storage, senders_by_storage)
