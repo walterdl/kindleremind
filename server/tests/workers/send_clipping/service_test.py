@@ -1,14 +1,13 @@
 import pytest
 from unittest.mock import Mock
 
-from kindleremind.workers.send_clipping.service import ClippingSenderService, TokenProto
+from kindleremind.workers.send_clipping.service import ClippingSenderService
 
 
 @pytest.fixture()
 def token():
     return {
         'value': 'Token value',
-        'proto': TokenProto.FCM,
     }
 
 
@@ -27,11 +26,9 @@ def service(clipping, token):
     tokens_storage = Mock()
     tokens_storage.get_token.return_value = token
 
-    senders_by_storage = {
-        TokenProto.FCM: Mock()
-    }
+    sender = Mock()
 
-    return ClippingSenderService(clippings_storage, tokens_storage, senders_by_storage)
+    return ClippingSenderService(clippings_storage, tokens_storage, sender)
 
 
 def test_get_token_from_storage(service):
@@ -53,19 +50,12 @@ def test_get_random_clipping_from_storage(service):
 def test_cancel_sending_if_no_clipping_in_storage(service, token):
     service._clippings_storage.get_random_clipping.return_value = None
     service.send_clipping()
-    service._senders_by_proto[token['proto']].send_clipping.assert_not_called()
-
-
-def test_throw_exception_if_no_sender_for_token_proto(service, token):
-    service._senders_by_proto = {}
-    with pytest.raises(Exception) as error:
-        service.send_clipping()
-    assert error.value.args[0] == f"No sender for token proto {token['proto']}"
+    service._sender.send_clipping.assert_not_called()
 
 
 def test_send_clipping_using_sender_service_for_token_proto(service, token, clipping):
     service.send_clipping()
-    service._senders_by_proto[token['proto']].send_clipping.assert_called_once_with({
+    service._sender.send_clipping.assert_called_once_with({
         'token': token,
         'clipping': clipping
     })
