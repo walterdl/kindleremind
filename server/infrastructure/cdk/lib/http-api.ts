@@ -1,14 +1,18 @@
 import { Construct } from "constructs";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
-
-import { LambdaConfigs, LambdaConfig, Auth } from "./lambdas-config";
-import { Lambdas } from "./lambdas";
+import { ARecord, RecordTarget } from "aws-cdk-lib/aws-route53";
+import { ApiGatewayv2DomainProperties } from "aws-cdk-lib/aws-route53-targets";
 import {
   HttpApi,
   IHttpRouteAuthorizer,
   HttpStage,
+  DomainName,
 } from "@aws-cdk/aws-apigatewayv2-alpha";
+
+import { LambdaConfigs, LambdaConfig, Auth } from "./lambdas-config";
+import { Lambdas } from "./lambdas";
 import { Authorizers } from "./authorizers";
+import { KrDomainName } from "./domain-name";
 
 export class KrHttpApi extends Construct {
   constructor(scope: Construct, id: string, props: Props) {
@@ -35,10 +39,28 @@ export class KrHttpApi extends Construct {
       });
     }
 
+    const domainNameInstance = new DomainName(this, "ApiDomainName", {
+      domainName: props.domainName.getDomainName(props.domainName.apiSubdomain),
+      certificate: props.domainName.apiCertificate,
+    });
     new HttpStage(this, "Stage", {
       httpApi,
       stageName: "v1",
       autoDeploy: true,
+      domainMapping: {
+        domainName: domainNameInstance,
+      },
+    });
+
+    new ARecord(scope, "ApiRoute53AliasRecord", {
+      recordName: props.domainName.apiSubdomain,
+      zone: props.domainName.hostedZone,
+      target: RecordTarget.fromAlias(
+        new ApiGatewayv2DomainProperties(
+          domainNameInstance.regionalDomainName,
+          domainNameInstance.regionalHostedZoneId
+        )
+      ),
     });
   }
 }
@@ -62,4 +84,5 @@ function getAuthorizer(
 interface Props {
   lambdas: Lambdas;
   authorizers: Authorizers;
+  domainName: KrDomainName;
 }
