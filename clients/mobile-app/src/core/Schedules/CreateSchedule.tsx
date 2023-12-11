@@ -6,7 +6,7 @@ import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import {AddButton} from '../../components/AddButton';
 import {Days} from './Days';
 import {useStyles} from './createScheduleStyles';
-import {to12UtcHours} from './to12UtcHours';
+import {to12Hours} from './to12Hours';
 import {Weekday} from './types';
 import {useCreateSchedule} from './useCreateSchedule';
 
@@ -29,12 +29,13 @@ export function CreateSchedule() {
   const showTimePicker = useCallback(() => {
     DateTimePickerAndroid.open({
       value: time,
-      onChange: event => {
-        setTime(new Date(event.nativeEvent.timestamp));
+      onChange: (_, date) => {
+        if (date) {
+          setTime(date);
+        }
       },
       mode: 'time',
       is24Hour: false,
-      timeZoneName: 'UTC',
     });
   }, [time]);
 
@@ -62,10 +63,10 @@ export function CreateSchedule() {
           to receive notifications.
         </Text>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>UTC Time: </Text>
+          <Text style={styles.label}>Time: </Text>
           <View style={styles.timeButtonContainer}>
             <Button
-              title={to12UtcHours(time)}
+              title={to12Hours(time)}
               type="outline"
               onPress={showTimePicker}
             />

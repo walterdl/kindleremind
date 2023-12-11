@@ -5,7 +5,7 @@ import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 import {useStyles} from './scheduleCardStyles';
 import {ReminderSchedule} from './types';
-import {to12UtcHours} from './to12UtcHours';
+import {to12Hours} from './to12Hours';
 import {Days} from './Days';
 import {useDeleteSchedule} from './useDeleteSchedule';
 
@@ -32,10 +32,8 @@ export function ScheduleCard(props: Props) {
       <View style={styles.content}>
         <Text>
           Repeats at{' '}
-          <Text style={styles.time}>
-            {to12UtcHours(props.schedule.datetime)}
-          </Text>{' '}
-          (UTC) on:
+          <Text style={styles.time}>{to12Hours(props.schedule.datetime)}</Text>{' '}
+          on:
         </Text>
         <Days value={props.schedule.weekdays} readonly />
         <View style={styles.optionsContainer}>
