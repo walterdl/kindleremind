@@ -3,3 +3,7 @@ data
 __pycache__
 .env
 test.py
+dist
+build
+kindleremind.spec
+notes
