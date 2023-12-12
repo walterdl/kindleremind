@@ -4,7 +4,7 @@ import dateutil.tz as tz
 from kindleremind.clippings.months import SPANISH_MONTHS
 
 
-def get_datetime(text):
+def get_datetime(metadata):
     """Abstract the datetime from the metadata of a clipping.
 
     Args:
@@ -14,21 +14,30 @@ def get_datetime(text):
     Returns:
         datetime: The datetime of the clipping as a datetime object with local timezone.
     """
-    return _build_datetime(**_datetime_parts(text))
+    return _build_datetime(**_datetime_parts(metadata))
 
 
-def _datetime_parts(text):
-    parts = text.split('|')
+def _datetime_parts(metadata):
+    datetime_literal_section = _get_datetime_section(metadata)
+
+    lang_hint, *datetime_parts = datetime_literal_section.split(',')
+    split = _get_datetime_splitter_by_lang(lang_hint)
+
+    return split([part.strip() for part in datetime_parts])
+
+
+def _get_datetime_section(metadata):
+    """Given a clipping metadata, return the raw datetime text.
+
+    Example input: "- Your Highlight on page 92 | [location 1406-1407 |] Added on Saturday, 26 March 2016 14:59:39"
+    Example output: "Added on Saturday, 26 March 2016 14:59:39"
+    """
+    parts = metadata.split('|')
 
     # Some clipping metadata have two location sections divided by pipe (|).
     # We ask for the last one because it's the one that contains the datetime.
     # Example of result: "Added on Monday, 1 January 2018 00:00:27"
-    text = parts[2].strip() if len(parts) > 2 else parts[1].strip()
-
-    [lang_hint, datetime_text] = text.split(',')
-    split = _get_datetime_splitter_by_lang(lang_hint)
-
-    return split(datetime_text.strip())
+    return parts[2].strip() if len(parts) > 2 else parts[1].strip()
 
 
 def _get_datetime_splitter_by_lang(lang_hint):
@@ -38,9 +47,9 @@ def _get_datetime_splitter_by_lang(lang_hint):
     return _split_en_datetime
 
 
-def _split_es_datetime(text):
-    # Text example = "17 de diciembre de 2022 3:28:17 p. m."
-    parts = text.split(' ')
+def _split_es_datetime(datetime_parts):
+    # Input example = ["17 de diciembre de 2022 3:28:17 p. m."]
+    parts = datetime_parts[0].split(' ')
     time = parts[5].split(':')
     meridiem_indicator = parts[6] if len(parts) > 6 else None
 
@@ -55,9 +64,20 @@ def _split_es_datetime(text):
     }
 
 
-def _split_en_datetime(text):
-    # Text example = "26 March 2016 2:59:39 p. m."
-    parts = text.split(' ')
+def _split_en_datetime(datetime_parts):
+    """
+    Input examples:
+    Variant 1 = ["26 March 2016 2:59:39 p. m."]
+
+    (Some kindle devices split the month and day before time and use meridiem indicator in uppercase)
+    Variant 2 = ["December 01", "2023 9:02:48 PM"]
+    """
+
+    if len(datetime_parts) == 2:
+        datetime_parts = _normalize_english_variant_2(datetime_parts)
+
+    raw_datetime = datetime_parts[0]
+    parts = raw_datetime.split(' ')
     time = parts[3].split(':')
     meridiem_indicator = parts[4] if len(parts) > 4 else None
 
@@ -70,6 +90,25 @@ def _split_en_datetime(text):
         "seconds": time[2],
         "meridiem_indicator": meridiem_indicator,
     }
+
+
+def _normalize_english_variant_2(datetime_parts):
+    # ["December 01", "2023 9:02:48 PM"] -> ["01 December 2016 9:02:48 p. m."]
+    month, day = datetime_parts[0].split(' ')
+    time_part = datetime_parts[1]
+    result = f"{day} {month} {time_part}"
+
+    # Format meridiem indicator to lowercase.
+    meridiem_indicator = result.split(' ')[-1:][0]
+    meridiem_formats = {
+        "PM": "p. m.",
+        "AM": "a. m.",
+    }
+    if meridiem_indicator in meridiem_formats:
+        result = result.replace(
+            meridiem_indicator, meridiem_formats[meridiem_indicator])
+
+    return [result]
 
 
 def _build_datetime(*, year, month_name, day, hour, minutes, seconds, meridiem_indicator):

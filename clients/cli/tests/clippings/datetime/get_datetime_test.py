@@ -23,6 +23,11 @@ def metadata_and_expected_datetimes():
         (
             '- Your Highlight at location 784-785 | Added on Saturday, 26 March 2016 11:37:26 p. m.',
             datetime(2016, 3, 26, 23, 37, 26, tzinfo=tz.tzlocal())
+        ),
+        # English variant 2: a datetime that contains a comma (',') separating month and time. Also, with meridiem in uppercase.
+        (
+            '- Your Highlight on page 4 | Location 50-51 | Added on Monday, December 01, 2023 9:02:48 PM',
+            datetime(2023, 12, 1, 21, 2, 48, tzinfo=tz.tzlocal())
         )
     ]
 
