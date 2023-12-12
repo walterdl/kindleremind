@@ -24,14 +24,14 @@ export class KrCognitoUserPool extends Construct {
         },
       },
       userInvitation: {
-        emailSubject: "Your invitation to join KindleRemind",
+        emailSubject: "Your invitation to join Kindle Remind",
         emailBody:
-          "Hello {username}, you have been invited to join KindleRemind. Your temporary password is {####}.",
+          "Hello {username}, you have been invited to join Kindle Remind. Your temporary password is {####}.",
       },
       userVerification: {
-        emailSubject: "Verify your new account for KindleRemind",
+        emailSubject: "Verify your new account for Kindle Remind",
         emailBody:
-          "Hello {username}, Thanks for signing up to KindleRemind! Your verification code is {####}.",
+          "Thanks for signing up to Kindle Remind! Your verification code is {####}.",
         emailStyle: cognito.VerificationEmailStyle.CODE,
       },
       deletionProtection: true,
