@@ -14,7 +14,7 @@ def get_lambda_specs():
     with open('../lambdas.yml') as lambda_configs_file:
         lambda_configs = yaml.load(lambda_configs_file, Loader=yaml.Loader)
 
-    return (x for x in lambda_configs.values() if x['type'] == 'endpoint')
+    return (x for x in lambda_configs.values())
 
 
 def build_event():
@@ -53,6 +53,9 @@ def format_lambda_response(response, lambda_spec):
 
 
 for lambda_spec in get_lambda_specs():
+    if 'path' not in lambda_spec or 'method' not in lambda_spec:
+        continue
+
     @app.route(
         lambda_spec['path'],
         methods=[lambda_spec['method'].upper()],

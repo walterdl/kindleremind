@@ -74,5 +74,7 @@ DeleteSchedule:
   handler_func: lambda_handler
 SendClipping:
   type: worker
+  method: post
+  path: /send-clipping
   handler_module: kindleremind.workers.send_clipping.handler
   handler_func: handler
